@@ -1,56 +1,32 @@
-import * as fs from "fs";
 import * as cheerio from "cheerio";
+import { IBankListResp } from "./type";
 import * as puppeteer from "puppeteer";
+import { FetchWebsiteContent, SaveToJsonFile } from "./common";
 
-interface CellContent {
-  bankName: string;
-  bankLink: string | null;
-}
-
-async function fetchPageContent(url: string): Promise<string> {
+export async function GetBankList(browser: puppeteer.Browser) {
   try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
-    const htmlContent = await page.content();
-    await browser.close();
-    return htmlContent;
+    const url = "https://flo.uri.sh/visualisation/13625330/embed?auto=1";
+    const htmlContent = await FetchWebsiteContent(browser, url);
+    const parsedContent = parseHtmlContent(htmlContent);
+    SaveToJsonFile(parsedContent, "bank-data.json");
+    return [];
   } catch (error) {
-    console.error(`Error fetching the page: ${error}`);
-    throw error;
+    return [];
   }
 }
 
-function parseHtmlContent(html: string): CellContent[] {
+function parseHtmlContent(html: string): IBankListResp[] {
   const $ = cheerio.load(html);
-  const cellContents: CellContent[] = [];
+  const output: IBankListResp[] = [];
 
   $(".cell-body").each((index, element) => {
     const bankName = $(element).text().trim();
     const bankLink = $(element).find("a").attr("href") || null;
 
     if (bankName && bankLink) {
-      cellContents.push({ bankName, bankLink });
+      output.push({ bankName, bankLink });
     }
   });
 
-  return cellContents;
+  return output;
 }
-
-function saveToJsonFile(data: CellContent[], filename: string): void {
-  fs.writeFileSync(filename, JSON.stringify(data, null, 2), "utf-8");
-}
-
-async function main() {
-  const url = "https://flo.uri.sh/visualisation/13625330/embed?auto=1";
-  try {
-    const htmlContent = await fetchPageContent(url);
-    const parsedContent = parseHtmlContent(htmlContent);
-    saveToJsonFile(parsedContent, "bank-list.json");
-    console.log("Data has been saved to bank-list.json");
-  } catch (error) {
-    console.error("An error occurred:", error);
-  }
-}
-
-main();
