@@ -16,10 +16,14 @@ export async function FetchWebsiteContent(
     const page = await browser.newPage();
     await page.goto(url, {
       waitUntil: "networkidle2",
-      timeout: 10000,
+      timeout: 1000 * 60 * 5,
     });
+    // 如果是众安的话，则模拟点击一次
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    if (url.indexOf("bank.za.group") !== -1) {
+      await page.click(".InterestQueryTable_tabItem__2dCiB:first-child");
+    }
     const htmlContent = await page.content();
-    await browser.close();
     return htmlContent;
   } catch (error) {
     console.error(`Error fetching the page: ${error}`);
@@ -62,6 +66,10 @@ export function FormatPeriod(period: string): string {
 
 function PeriodMap(title: string) {
   const map: { [key: string]: string } = {
+    一天: "1天",
+    七天: "7天",
+    "1週": "7天",
+    十四天: "14天",
     一個月: "1個月",
     兩個月: "2個月",
     三個月: "3個月",
@@ -71,6 +79,7 @@ function PeriodMap(title: string) {
     九個月: "9個月",
     十二個月: "12個月",
     一年: "12個月",
+    兩年: "24個月",
   };
   return map[title] || title;
 }
@@ -81,6 +90,9 @@ function PeriodMap(title: string) {
  */
 export function GetInterestTemplate(): { [key: string]: string } {
   return {
+    "1D": "",
+    "7D": "",
+    "14D": "",
     "1M": "",
     "2M": "",
     "3M": "",
@@ -88,6 +100,7 @@ export function GetInterestTemplate(): { [key: string]: string } {
     "6M": "",
     "9M": "",
     "12M": "",
+    "24M": "",
   };
 }
 

@@ -9,7 +9,16 @@ import { GetHangSengBankInterestRate } from "./interest-hangseng";
 import { GetCitiBankInterestRate } from "./interest-citibank";
 import { GetCcbBankInterestRate } from "./interest-ccb";
 import { GetIcbcBankInterestRate } from "./interest-icbc";
-import { GetFuBonBankInterestRate } from "./interest-fubon";
+import { GetFuBonBankInterestRate } from "./interest-fubonbank";
+import { GetBeaBankInterestRate } from "./interest-bea";
+import { GetDbsBankInterestRate } from "./interest-dbs";
+import { GetPublicBankInterestRate } from "./interest-public";
+import { GetWingLungBankInterestRate } from "./interest-cmbwinglung";
+import { GetDahSingBankInterestRate } from "./interest-dahsing";
+import { GetChBankInterestRate } from "./interest-chbank";
+import { GetShaComBankInterestRate } from "./interest-shacombank";
+import { GetZaBankInterestRate } from "./interest-za";
+import { GetFusionBankInterestRate } from "./interest-fusionbank";
 
 export async function main() {
   const browser = await puppeteer.launch({
@@ -24,6 +33,9 @@ export async function main() {
       "--single-process",
     ],
   });
+
+  const fusionBank = await GetFusionBankInterestRate(browser);
+  console.log(fusionBank);
 
   // const welabBank = await GetWeLabInterestRate(browser);
   // console.log(welabBank);
@@ -55,9 +67,33 @@ export async function main() {
   // const icbcBank = await GetIcbcBankInterestRate(browser);
   // console.log(icbcBank);
 
-  const fuBonBank = await GetFuBonBankInterestRate(browser);
-  console.log(fuBonBank);
+  // const fuBonBank = await GetFuBonBankInterestRate(browser);
+  // console.log(fuBonBank);
 
-  browser.close();
+  // const beaBank = await GetBeaBankInterestRate(browser);
+  // console.log(beaBank);
+
+  // const dbsBank = await GetDbsBankInterestRate(browser);
+  // console.log(dbsBank);
+
+  // const publicBank = await GetPublicBankInterestRate(browser);
+  // console.log(publicBank);
+
+  // const wingLungBank = await GetWingLungBankInterestRate(browser);
+  // console.log(wingLungBank);
+
+  // const dahSingBak = await GetDahSingBankInterestRate(browser);
+  // console.log(dahSingBak);
+
+  // const chBank = await GetChBankInterestRate(browser);
+  // console.log(chBank);
+
+  // const ncbBank = await GetShaComBankInterestRate(browser);
+  // console.log(ncbBank);
+
+  // const zaBank = await GetZaBankInterestRate(browser);
+  // console.log(zaBank);
+
+  await browser.close();
 }
 main();

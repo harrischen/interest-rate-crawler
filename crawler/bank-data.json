@@ -24,10 +24,6 @@
     "bankLink": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/dep_rates.html"
   },
   {
-    "bankName": "工銀亞洲／迎新賞",
-    "bankLink": "https://www.icbcasia.com/hk/tc/personal/banking/rate/deposit-interest-rate/default.html"
-  },
-  {
     "bankName": "富邦",
     "bankLink": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html"
   },
@@ -37,7 +33,7 @@
   },
   {
     "bankName": "星展",
-    "bankLink": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo?pid=hk-personal-zh-home-cardtiles1-s2"
+    "bankLink": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo"
   },
   {
     "bankName": "大眾",
@@ -49,23 +45,15 @@
   },
   {
     "bankName": "招商永隆",
-    "bankLink": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/investments/financial-information/interest-rates/deposit-interest-rates.html"
+    "bankLink": "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp"
   },
   {
     "bankName": "創興",
     "bankLink": "https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml"
   },
   {
-    "bankName": "南商",
-    "bankLink": "https://www.ncb.com.hk/nanyang_bank/popup1/deposit.html"
-  },
-  {
     "bankName": "上商",
     "bankLink": "https://www.shacombank.com.hk/tch/personal/promotion/fix-rate.jsp"
-  },
-  {
-    "bankName": "交銀香港",
-    "bankLink": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2004972/2004979/2651277.shtml?channelId=2004972?WT.ac="
   },
   {
     "bankName": "眾安",
