@@ -18,11 +18,7 @@ export async function FetchWebsiteContent(
       waitUntil: "networkidle2",
       timeout: 1000 * 60 * 5,
     });
-    // 如果是众安的话，则模拟点击一次
     await new Promise((resolve) => setTimeout(resolve, 500));
-    if (url.indexOf("bank.za.group") !== -1) {
-      await page.click(".InterestQueryTable_tabItem__2dCiB:first-child");
-    }
     const htmlContent = await page.content();
     return htmlContent;
   } catch (error) {
@@ -69,6 +65,8 @@ function PeriodMap(title: string) {
     一天: "1天",
     七天: "7天",
     "1週": "7天",
+    "1星期": "7天",
+    "2星期": "14天",
     十四天: "14天",
     一個月: "1個月",
     兩個月: "2個月",
@@ -90,17 +88,11 @@ function PeriodMap(title: string) {
  */
 export function GetInterestTemplate(): { [key: string]: string } {
   return {
-    "1D": "",
     "7D": "",
-    "14D": "",
     "1M": "",
-    "2M": "",
     "3M": "",
-    "4M": "",
     "6M": "",
-    "9M": "",
     "12M": "",
-    "24M": "",
   };
 }
 
