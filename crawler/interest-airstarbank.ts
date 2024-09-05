@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
+import { IInterestResp } from "./type";
 import {
   FetchWebsiteContent,
   GetInterestTemplate,
@@ -20,12 +21,7 @@ export async function GetAirStarBankInterestRate(browser: puppeteer.Browser) {
       HKD: "",
     },
     deposit: {
-      minAmt: {
-        HKD: "",
-      },
-      interestRates: {
-        HKD: {} as { [key: string]: string },
-      },
+      HKD: [] as IInterestResp[],
     },
   };
   try {
@@ -88,13 +84,23 @@ function getDepositDetail(html: string) {
   usdOutput["12M"] = tr.eq(22).find("td").eq(1).text().trim();
 
   return {
-    minAmt: {
-      HKD: "-",
-    },
-    interestRates: {
-      HKD: FormatInterestOutput(hkdOutput),
-      CNY: FormatInterestOutput(cnyOutput),
-      USD: FormatInterestOutput(usdOutput),
-    },
+    HKD: [
+      {
+        min: "-",
+        rates: FormatInterestOutput(hkdOutput),
+      },
+    ],
+    CNY: [
+      {
+        min: "-",
+        rates: FormatInterestOutput(cnyOutput),
+      },
+    ],
+    USD: [
+      {
+        min: "-",
+        rates: FormatInterestOutput(usdOutput),
+      },
+    ],
   };
 }

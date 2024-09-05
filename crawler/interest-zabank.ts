@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
+import { IInterestResp } from "./type";
 import {
-  FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
   FormatPeriod,
@@ -21,12 +21,7 @@ export async function GetZaBankInterestRate(browser: puppeteer.Browser) {
       HKD: "",
     },
     deposit: {
-      minAmt: {
-        HKD: "",
-      },
-      interestRates: {
-        HKD: {} as { [key: string]: string },
-      },
+      HKD: [] as IInterestResp[],
     },
   };
   try {
@@ -89,11 +84,11 @@ function getDepositDetail(html: string) {
   });
 
   return {
-    minAmt: {
-      HKD: "1",
-    },
-    interestRates: {
-      HKD: FormatInterestOutput(output),
-    },
+    HKD: [
+      {
+        min: "1",
+        rates: FormatInterestOutput(output),
+      },
+    ],
   };
 }

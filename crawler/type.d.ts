@@ -4,8 +4,8 @@ export interface IBankListResp {
 }
 
 export interface IInterestResp {
-  /** 存期 */
-  deposit_period: string;
-  /** 利率 */
-  interest_rate: string;
+  min: string;
+  rates: {
+    [key: string]: string;
+  };
 }

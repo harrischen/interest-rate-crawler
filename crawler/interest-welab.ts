@@ -22,12 +22,7 @@ export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
       HKD: "",
     },
     deposit: {
-      minAmt: {
-        HKD: "",
-      },
-      interestRates: {
-        HKD: {} as { [key: string]: string },
-      },
+      HKD: [] as IInterestResp[],
     },
   };
   try {
@@ -76,13 +71,11 @@ function getDepositDetail(html: string) {
   });
 
   return {
-    minAmt: {
-      HKD: "-",
-    },
-    interestRates: {
-      HKD: FormatInterestOutput(hkdOutput),
-      CNY: [],
-      USD: [],
-    },
+    HKD: [
+      {
+        min: "-",
+        rates: FormatInterestOutput(hkdOutput),
+      },
+    ],
   };
 }

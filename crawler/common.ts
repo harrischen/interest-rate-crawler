@@ -64,6 +64,7 @@ function PeriodMap(title: string) {
   const map: { [key: string]: string } = {
     一天: "1天",
     七天: "7天",
+    "7日": "7天",
     "1週": "7天",
     "1星期": "7天",
     "2星期": "14天",
@@ -104,4 +105,15 @@ export function GetInterestTemplate(): { [key: string]: string } {
  */
 export function FormatInterestOutput(param: { [key: string]: string }) {
   return param;
+}
+
+/**
+ * 将字符串里面的利率取出来
+ * @param input
+ * @returns
+ */
+export function ExtractPercentage(input: string) {
+  const regex = /(\d+(\.\d+)?)%/;
+  const match = input.match(regex);
+  return match ? match[0] : "";
 }

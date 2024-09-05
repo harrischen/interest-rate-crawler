@@ -1,10 +1,12 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
+import { IInterestResp } from "./type";
 import {
   FormatPeriod,
   FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
+  ExtractPercentage,
 } from "./common";
 
 /**
@@ -15,18 +17,13 @@ import {
  */
 export async function GetPaoBankInterestRate(browser: puppeteer.Browser) {
   const output = {
-    cnName: "平安壹賬通",
+    bankName: "平安壹賬通",
     url: "https://www.paob.com.hk/tc/retail-savings.html",
     savings: {
       HKD: "",
     },
     deposit: {
-      minAmt: {
-        HKD: "",
-      },
-      interestRates: {
-        HKD: {} as { [key: string]: string },
-      },
+      HKD: [] as IInterestResp[],
     },
   };
   try {
@@ -48,7 +45,7 @@ function getSavingsDetail(html: string) {
   const $ = cheerio.load(html);
   const targetDom = $(".des-block ul").eq(0).find("li").eq(0);
   return {
-    HKD: extractPercentage(targetDom.text().trim()),
+    HKD: ExtractPercentage(targetDom.text().trim()),
     USD: "",
     CNY: "",
   };
@@ -76,24 +73,11 @@ function getDepositDetail(html: string) {
   });
 
   return {
-    minAmt: {
-      HKD: "100",
-    },
-    interestRates: {
-      HKD: FormatInterestOutput(hkdOutput),
-      CNY: [],
-      USD: [],
-    },
+    HKD: [
+      {
+        min: "100",
+        rates: FormatInterestOutput(hkdOutput),
+      },
+    ],
   };
-}
-
-/**
- * 将字符串里面的利率取出来
- * @param input
- * @returns
- */
-function extractPercentage(input: string) {
-  const regex = /(\d+(\.\d+)?)%/;
-  const match = input.match(regex);
-  return match ? match[0] : "";
 }
