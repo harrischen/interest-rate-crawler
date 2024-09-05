@@ -43,8 +43,6 @@ export async function GetFusionBankInterestRate(browser: puppeteer.Browser) {
 function getSavingsDetail(html: string) {
   const $ = cheerio.load(html);
   const targetDom = $(".deposit-current");
-  console.log(targetDom.find("div").html());
-  console.log("-----");
   return {
     HKD: targetDom.children('div').eq(0).children("div").eq(1).text(),
     CNY: targetDom.children('div').eq(1).children("div").eq(1).text(),
