@@ -66,11 +66,13 @@ function getDepositDetail(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
 
   const lowLevel = {
+    title: "",
     min: "500 - 100000",
     rates: GetInterestTemplate(),
   };
 
   const highLevel = {
+    title: "",
     min: "500 - 100000",
     rates: GetInterestTemplate(),
   };

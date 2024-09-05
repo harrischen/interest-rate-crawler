@@ -5,6 +5,7 @@ export interface IBankListResp {
 
 export interface IInterestResp {
   min: string;
+  title: string;
   rates: {
     [key: string]: string;
   };

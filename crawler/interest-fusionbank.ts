@@ -77,6 +77,7 @@ function getDepositDetail(html: string) {
   return {
     HKD: [
       {
+        title: '',
         min: "0-49999",
         rates: FormatInterestOutput(hkdOutput),
       },

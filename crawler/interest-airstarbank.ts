@@ -86,18 +86,21 @@ function getDepositDetail(html: string) {
   return {
     HKD: [
       {
+        title: "",
         min: "-",
         rates: FormatInterestOutput(hkdOutput),
       },
     ],
     CNY: [
       {
+        title: "",
         min: "-",
         rates: FormatInterestOutput(cnyOutput),
       },
     ],
     USD: [
       {
+        title: "",
         min: "-",
         rates: FormatInterestOutput(usdOutput),
       },
