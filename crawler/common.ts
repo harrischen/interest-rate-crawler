@@ -60,6 +60,15 @@ export function FormatPeriod(period: string): string {
   return "";
 }
 
+/**
+ * 格式化利率信息
+ * @param val
+ * @returns
+ */
+export function FormatRate(val: string): string {
+  return val;
+}
+
 function PeriodMap(title: string) {
   const map: { [key: string]: string } = {
     一天: "1天",
@@ -67,6 +76,8 @@ function PeriodMap(title: string) {
     "7日": "7天",
     "1週": "7天",
     "1星期": "7天",
+    一星期: "7天",
+    兩星期: "14天",
     "2星期": "14天",
     十四天: "14天",
     一個月: "1個月",

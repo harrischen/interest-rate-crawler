@@ -2,11 +2,9 @@ import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
 import { IInterestResp } from "./type";
 import {
-  FormatPeriod,
   FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
-  ExtractPercentage,
 } from "./common";
 
 /**
