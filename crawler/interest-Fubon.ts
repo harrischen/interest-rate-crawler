@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FormatRate,
   FetchWebsiteContent,
@@ -16,11 +16,12 @@ import {
  * @returns
  */
 export async function GetFuBonBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "富邦银行",
+  const output: IGetRateResp = {
+    bankName: "富邦銀行",
+    group: "OtherTraditionalBank",
+    url: "https://www.fubonbank.com.hk/tc/home.html",
     savingsUrl: `https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml?tab=cloudRate`,
     depositUrl: `https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html`,
-    url: "https://www.fubonbank.com.hk/tc/home.html",
     savings: {
       HKD: "",
       USD: "",
@@ -28,17 +29,18 @@ export async function GetFuBonBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
+
   try {
-    // 获取活期利率信息
     const savingsContent = await FetchWebsiteContent(
       browser,
       output.savingsUrl
     );
     output.savings = getSavingsDetail(savingsContent);
 
-    // 获取定期利率信息
     const depositContent = await FetchWebsiteContent(
       browser,
       output.depositUrl
@@ -46,6 +48,9 @@ export async function GetFuBonBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetFuBonBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetFuBonBankInterestRate----------------");
     return output;
   }
 }
@@ -56,10 +61,15 @@ export async function GetFuBonBankInterestRate(browser: puppeteer.Browser) {
  * @returns
  */
 function getSavingsDetail(html: string) {
+  const $ = cheerio.load(html);
+  const tbody = $("#rateTable3 tbody");
+  const hkd = tbody.find("tr[title=HKD]").find("td").eq(1).text();
+  const cny = tbody.find("tr[title=RMB]").find("td").eq(1).text();
+  const usd = tbody.find("tr[title=USD]").find("td").eq(1).text();
   return {
-    HKD: "",
-    CNY: "",
-    USD: "",
+    HKD: FormatRate(hkd),
+    CNY: FormatRate(cny),
+    USD: FormatRate(usd),
   };
 }
 
@@ -86,8 +96,8 @@ function getDetailWithHKD(html: string) {
   const rateRow = table.find("tr").last();
   // 遍历存期信息，然后匹配相同的下标得到对应的利率
   periodRow.find("td").each((_, td) => {
-    const period = FormatPeriod($(td).text().trim());
-    const rate = rateRow.find("td").eq(_).text().trim();
+    const period = FormatPeriod($(td).text());
+    const rate = rateRow.find("td").eq(_).text();
     if (period && rate && output[period] === "") {
       output[period] = FormatRate(rate);
     }
@@ -110,8 +120,8 @@ function getDetailWithUSD(html: string) {
   const rateRow = table.find("tr").last();
   // 遍历存期信息，然后匹配相同的下标得到对应的利率
   periodRow.find("td").each((_, td) => {
-    const period = FormatPeriod($(td).text().trim());
-    const rate = rateRow.find("td").eq(_).text().trim();
+    const period = FormatPeriod($(td).text());
+    const rate = rateRow.find("td").eq(_).text();
     if (period && rate && output[period] === "") {
       output[period] = FormatRate(rate);
     }
@@ -134,8 +144,8 @@ function getDetailWithCNY(html: string) {
   const rateRow = table.find("tr").eq(2);
   // 遍历存期信息，然后匹配相同的下标得到对应的利率
   periodRow.find("td").each((_, td) => {
-    const period = FormatPeriod($(td).text().trim());
-    const rate = rateRow.find("td").eq(_).text().trim();
+    const period = FormatPeriod($(td).text());
+    const rate = rateRow.find("td").eq(_).text();
     if (period && rate && output[period] === "") {
       output[period] = FormatRate(rate);
     }

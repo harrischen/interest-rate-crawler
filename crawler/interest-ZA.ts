@@ -2,11 +2,10 @@ import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
 import { IGetRateResp, IInterestResp } from "./type";
 import {
-  FormatRate,
-  FormatPeriod,
-  FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
+  FormatPeriod,
+  FormatRate,
 } from "./common";
 
 /**
@@ -15,13 +14,13 @@ import {
  * @param url
  * @returns
  */
-export async function GetFusionBankInterestRate(browser: puppeteer.Browser) {
+export async function GetZaBankInterestRate(browser: puppeteer.Browser) {
   const output: IGetRateResp = {
-    bankName: "富融銀行",
     group: "VirtualBank",
-    url: "https://www.fusionbank.com/?lang=tc",
-    savingsUrl: "https://www.fusionbank.com/deposit.html?lang=tc",
-    depositUrl: "https://www.fusionbank.com/deposit.html?lang=tc",
+    bankName: "眾安銀行",
+    url: "https://bank.za.group/hk",
+    savingsUrl: "https://bank.za.group/hk/deposit",
+    depositUrl: "https://bank.za.group/hk/deposit",
     savings: {
       HKD: "",
       USD: "",
@@ -34,40 +33,27 @@ export async function GetFusionBankInterestRate(browser: puppeteer.Browser) {
     },
   };
   try {
-    // 获取活期存款的利率信息
-    const savingsContent = await FetchWebsiteContent(
-      browser,
-      output.depositUrl
-    );
-    output.savings = getSavingsDetail(savingsContent);
-
-    // 获取定期存款的利率信息
-    const depositPage = await browser.newPage();
-    await depositPage.goto(output.depositUrl, {
+    const page = await browser.newPage();
+    await page.goto(output.depositUrl, {
       waitUntil: "networkidle2",
       timeout: 1000 * 60 * 5,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const hkdDepositContent = await depositPage.content();
-    output.deposit.HKD = getDepositDetail(hkdDepositContent).HKD;
+    // 活期
+    let htmlContent = await page.content();
+    output.savings = getSavingsDetail(htmlContent);
 
-    await depositPage.click(".deposit-time-item:nth-child(2)");
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const cnyDepositContent = await depositPage.content();
-    output.deposit.CNY = getDepositDetail(cnyDepositContent).CNY;
+    await page.waitForSelector(".InterestQueryTable_tabItem__2dCiB");
+    await page.click(".InterestQueryTable_tabItem__2dCiB:first-child");
 
-    await depositPage.click(".deposit-time-item:last-child");
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const usdDepositContent = await depositPage.content();
-    output.deposit.USD = getDepositDetail(usdDepositContent).USD;
-
-    await depositPage.close();
+    // 定期
+    htmlContent = await page.content();
+    output.deposit = getDepositDetail(htmlContent);
     return output;
   } catch (error) {
-    console.log("----------------GetFusionBankInterestRate----------------");
+    console.log("----------------GetZaBankInterestRate----------------");
     console.log(error);
-    console.log("----------------GetFusionBankInterestRate----------------");
+    console.log("----------------GetZaBankInterestRate----------------");
     return output;
   }
 }
@@ -79,11 +65,11 @@ export async function GetFusionBankInterestRate(browser: puppeteer.Browser) {
  */
 function getSavingsDetail(html: string) {
   const $ = cheerio.load(html);
-  const targetDom = $(".deposit-current").children("div");
+  const targetDom = $(".InterestQueryTable_tabContent__onTgG tbody tr");
   return {
-    HKD: FormatRate(targetDom.eq(0).children("div").eq(1).text()),
-    CNY: FormatRate(targetDom.eq(1).children("div").eq(1).text()),
-    USD: FormatRate(targetDom.eq(2).children("div").eq(1).text()),
+    HKD: FormatRate(targetDom.eq(0).find("td").eq(1).text()),
+    CNY: FormatRate(targetDom.eq(0).find("td").eq(2).text()),
+    USD: FormatRate(targetDom.eq(0).find("td").eq(3).text()),
   };
 }
 
@@ -92,7 +78,6 @@ function getSavingsDetail(html: string) {
  * @param html
  * @returns
  */
-
 function getDepositDetail(html: string) {
   return {
     HKD: [getDetailWithHKD(html)],
@@ -106,7 +91,7 @@ function getDetailWithHKD(html: string) {
   const output = GetInterestTemplate();
 
   // 找出指定的table
-  const tbody = $(".deposit-table tbody");
+  const tbody = $(".InterestQueryTable_tabContent__onTgG tbody");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   tbody.find("tr").each((_, row) => {
@@ -129,12 +114,12 @@ function getDetailWithUSD(html: string) {
   const output = GetInterestTemplate();
 
   // 找出指定的table
-  const tbody = $(".deposit-table tbody");
+  const tbody = $(".InterestQueryTable_tabContent__onTgG tbody");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   tbody.find("tr").each((_, row) => {
     const period = FormatPeriod($(row).find("td").eq(0).text());
-    const rate = FormatRate($(row).find("td").eq(1).text());
+    const rate = FormatRate($(row).find("td").eq(3).text());
     if (rate && period && output[period] === "") {
       output[period] = rate;
     }
@@ -152,12 +137,12 @@ function getDetailWithCNY(html: string) {
   const output = GetInterestTemplate();
 
   // 找出指定的table
-  const tbody = $(".deposit-table tbody");
+  const tbody = $(".InterestQueryTable_tabContent__onTgG tbody");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   tbody.find("tr").each((_, row) => {
     const period = FormatPeriod($(row).find("td").eq(0).text());
-    const rate = FormatRate($(row).find("td").eq(1).text());
+    const rate = FormatRate($(row).find("td").eq(2).text());
     if (rate && period && output[period] === "") {
       output[period] = rate;
     }

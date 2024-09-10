@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
+  FormatRate,
   FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
-  FormatPeriod,
 } from "./common";
 
 /**
@@ -15,11 +15,12 @@ import {
  * @returns
  */
 export async function GetScBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "恒生银行",
+  const output: IGetRateResp = {
+    bankName: "渣打銀行",
+    group: "1stTierBank",
+    url: "https://www.sc.com/hk/zh/",
     savingsUrl: "https://www.sc.com/hk/zh/deposits/board-rates/",
     depositUrl: "https://www.sc.com/hk/zh/deposits/online-time-deposit/",
-    url: "https://www.sc.com/hk/zh/",
     savings: {
       HKD: "",
       USD: "",
@@ -27,6 +28,8 @@ export async function GetScBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
@@ -45,6 +48,9 @@ export async function GetScBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetScBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetScBankInterestRate----------------");
     return output;
   }
 }
@@ -72,9 +78,9 @@ function getSavingsDetail(html: string) {
     .find("table")
     .find("tbody");
   return {
-    HKD: hkd.find("tr").eq(0).find("td").eq(1).text().trim(),
-    CNY: cny.find("tr").eq(0).find("td").eq(1).text().trim(),
-    USD: usd.find("tr").eq(0).find("td").eq(1).text().trim(),
+    HKD: FormatRate(hkd.find("tr").eq(0).find("td").eq(1).text()),
+    CNY: FormatRate(cny.find("tr").eq(0).find("td").eq(1).text()),
+    USD: FormatRate(usd.find("tr").eq(0).find("td").eq(1).text()),
   };
 }
 
@@ -96,9 +102,9 @@ function getDetailWithHKD(html: string) {
   const output = GetInterestTemplate();
 
   const tr = $("#table-content-253993-1 tbody").find("tr");
-  output["3M"] = tr.eq(0).find("td").eq(3).text();
-  output["6M"] = tr.eq(1).find("td").eq(1).text();
-  output["12M"] = tr.eq(2).find("td").eq(1).text();
+  output["3M"] = FormatRate(tr.eq(0).find("td").eq(3).text());
+  output["6M"] = FormatRate(tr.eq(1).find("td").eq(1).text());
+  output["12M"] = FormatRate(tr.eq(2).find("td").eq(1).text());
 
   return {
     title: "",
@@ -112,9 +118,9 @@ function getDetailWithUSD(html: string) {
   const output = GetInterestTemplate();
 
   const tr = $("#table-content-253993-1 tbody").find("tr");
-  output["3M"] = tr.eq(3).find("td").eq(3).text();
-  output["6M"] = tr.eq(4).find("td").eq(1).text();
-  output["12M"] = tr.eq(5).find("td").eq(1).text();
+  output["3M"] = FormatRate(tr.eq(3).find("td").eq(3).text());
+  output["6M"] = FormatRate(tr.eq(4).find("td").eq(1).text());
+  output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text());
 
   return {
     title: "",
@@ -128,9 +134,9 @@ function getDetailWithCNY(html: string) {
   const output = GetInterestTemplate();
 
   const tr = $("#table-content-253993-1 tbody").find("tr");
-  output["3M"] = tr.eq(6).find("td").eq(3).text();
-  output["6M"] = tr.eq(7).find("td").eq(1).text();
-  output["12M"] = tr.eq(8).find("td").eq(1).text();
+  output["3M"] = FormatRate(tr.eq(6).find("td").eq(3).text());
+  output["6M"] = FormatRate(tr.eq(7).find("td").eq(1).text());
+  output["12M"] = FormatRate(tr.eq(8).find("td").eq(1).text());
 
   return {
     title: "",

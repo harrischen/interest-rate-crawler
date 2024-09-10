@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FormatRate,
   FetchWebsiteContent,
@@ -15,11 +15,12 @@ import {
  * @returns
  */
 export async function GetBeaBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "东亚银行",
+  const output: IGetRateResp = {
+    bankName: "東亞銀行",
+    group: "OtherTraditionalBank",
+    url: "https://www.hkbea.com/html/tc/index.html",
     savingsUrl: `https://www.hkbea.com/cgi-bin/rate_hkddr.jsp?language=tc&language=tc`,
     depositUrl: `https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html`,
-    url: "https://www.hkbea.com/html/tc/index.html",
     savings: {
       HKD: "",
       USD: "",
@@ -27,6 +28,8 @@ export async function GetBeaBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
@@ -45,6 +48,9 @@ export async function GetBeaBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetBeaBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetBeaBankInterestRate----------------");
     return output;
   }
 }
@@ -59,7 +65,7 @@ function getSavingsDetail(html: string) {
 
   const tbody = $(".table1 tbody");
   return {
-    HKD: FormatRate(tbody.find("tr").eq(3).find("td").eq(1).text().trim()),
+    HKD: FormatRate(tbody.find("tr").eq(3).find("td").eq(1).text()),
     CNY: "",
     USD: "",
   };
@@ -87,15 +93,9 @@ function getDetailWithHKD(html: string) {
   const tr = table.find("tr");
 
   // 简单粗暴的指定定期数据
-  output["3M"] = FormatRate(
-    tr.eq(3).find("td").eq(1).text().split("/")?.[0]?.trim()
-  );
-  output["6M"] = FormatRate(
-    tr.eq(4).find("td").eq(1).text().split("/")?.[0]?.trim()
-  );
-  output["12M"] = FormatRate(
-    tr.eq(5).find("td").eq(1).text().split("/")?.[0]?.trim()
-  );
+  output["3M"] = FormatRate(tr.eq(3).find("td").eq(1).text().split("/")?.[0]);
+  output["6M"] = FormatRate(tr.eq(4).find("td").eq(1).text().split("/")?.[0]);
+  output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text().split("/")?.[0]);
 
   return {
     title: "顯卓私人理財或顯卓理財 - 新資金",
@@ -113,15 +113,9 @@ function getDetailWithUSD(html: string) {
   const tr = table.find("tr");
 
   // 简单粗暴的指定定期数据
-  output["3M"] = FormatRate(
-    tr.eq(3).find("td").eq(1).text().split("/")?.[0]?.trim()
-  );
-  output["6M"] = FormatRate(
-    tr.eq(4).find("td").eq(1).text().split("/")?.[0]?.trim()
-  );
-  output["12M"] = FormatRate(
-    tr.eq(5).find("td").eq(1).text().split("/")?.[0]?.trim()
-  );
+  output["3M"] = FormatRate(tr.eq(3).find("td").eq(1).text().split("/")?.[0]);
+  output["6M"] = FormatRate(tr.eq(4).find("td").eq(1).text().split("/")?.[0]);
+  output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text().split("/")?.[0]);
 
   return {
     title: "顯卓私人理財或顯卓理財 - 新資金",

@@ -2,11 +2,12 @@ import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
 import { IGetRateResp, IInterestResp } from "./type";
 import {
-  FormatRate,
   FormatPeriod,
   FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
+  ExtractPercentage,
+  FormatRate,
 } from "./common";
 
 /**
@@ -15,13 +16,13 @@ import {
  * @param url
  * @returns
  */
-export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
+export async function GetPaoBankInterestRate(browser: puppeteer.Browser) {
   const output: IGetRateResp = {
-    bankName: "匯立銀行",
     group: "VirtualBank",
-    url: "https://www.welab.bank/zh/",
-    savingsUrl: "https://www.welab.bank/zh/feature/gosave_2/",
-    depositUrl: "https://www.welab.bank/zh/feature/gosave_2/",
+    bankName: "平安壹賬通",
+    url: "https://www.paob.com.hk/tc/index.html",
+    savingsUrl: "https://www.paob.com.hk/tc/retail-savings.html",
+    depositUrl: "https://www.paob.com.hk/tc/retail-savings.html",
     savings: {
       HKD: "",
       USD: "",
@@ -39,9 +40,9 @@ export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(htmlContent);
     return output;
   } catch (error) {
-    console.log("----------------GetWeLabBankInterestRate----------------");
+    console.log("----------------GetPaoBankInterestRate----------------");
     console.log(error);
-    console.log("----------------GetWeLabBankInterestRate----------------");
+    console.log("----------------GetPaoBankInterestRate----------------");
     return output;
   }
 }
@@ -52,8 +53,10 @@ export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
  * @returns
  */
 function getSavingsDetail(html: string) {
+  const $ = cheerio.load(html);
+  const targetDom = $(".des-block ul").eq(0).find("li").eq(0);
   return {
-    HKD: "",
+    HKD: ExtractPercentage(targetDom.text()),
     USD: "",
     CNY: "",
   };
@@ -77,13 +80,12 @@ function getDetailWithHKD(html: string) {
   const output = GetInterestTemplate();
 
   // 找出指定的table
-  const tr = $(".data-perks .d-md-block tbody tr");
+  const tr = $(".table tbody tr");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   tr.each((_, row) => {
-    const tableDataCell = $(row).find("td");
-    const rate = FormatRate($(tableDataCell).eq(1).text());
-    const period = FormatPeriod($(tableDataCell).eq(0).text());
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(1).text());
     if (rate && period && output[period] === "") {
       output[period] = rate;
     }
@@ -91,7 +93,7 @@ function getDetailWithHKD(html: string) {
 
   return {
     title: "",
-    min: "10",
+    min: "100",
     rates: FormatInterestOutput(output),
   };
 }

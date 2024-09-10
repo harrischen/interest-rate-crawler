@@ -1,10 +1,11 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
+  FormatRate,
 } from "./common";
 
 /**
@@ -14,11 +15,12 @@ import {
  * @returns
  */
 export async function GetBocHkBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "中国银行(香港)",
+  const output: IGetRateResp = {
+    group: "1stTierBank",
+    bankName: "中銀銀行(香港)",
+    url: `https://www.bochk.com/tc/home.html`,
     savingsUrl: `https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk`,
     depositUrl: `https://www.bochk.com/tc/deposits/promotion/timedeposits.html`,
-    url: `https://www.bochk.com/tc/home.html`,
     savings: {
       HKD: "",
       USD: "",
@@ -26,29 +28,34 @@ export async function GetBocHkBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
     // 获取活期利率信息
-    const page = await browser.newPage();
-    await page.goto(output.savingsUrl, {
+    const savingsPage = await browser.newPage();
+    await savingsPage.goto(output.savingsUrl, {
       waitUntil: "networkidle2",
       timeout: 1000 * 60 * 5,
     });
-    await page.select("#depositRates_form_currency_field", "HKD");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await savingsPage.waitForSelector("#depositRates_form_currency_field");
+    await savingsPage.select("#depositRates_form_currency_field", "HKD");
     await new Promise((resolve) => setTimeout(resolve, 500));
-    const hkdSavingsContent = await page.content();
+    const hkdSavingsContent = await savingsPage.content();
     output.savings.HKD = getSavingsDetail(hkdSavingsContent);
 
-    await page.select("#depositRates_form_currency_field", "USD");
+    await savingsPage.select("#depositRates_form_currency_field", "USD");
     await new Promise((resolve) => setTimeout(resolve, 500));
-    const usdSavingsContent = await page.content();
+    const usdSavingsContent = await savingsPage.content();
     output.savings.USD = getSavingsDetail(usdSavingsContent);
 
-    await page.select("#depositRates_form_currency_field", "CNY");
+    await savingsPage.select("#depositRates_form_currency_field", "CNY");
     await new Promise((resolve) => setTimeout(resolve, 500));
-    const cnySavingsContent = await page.content();
+    const cnySavingsContent = await savingsPage.content();
     output.savings.CNY = getSavingsDetail(cnySavingsContent);
+    await savingsPage.close();
 
     // 获取定期利率信息
     const depositContent = await FetchWebsiteContent(
@@ -58,6 +65,9 @@ export async function GetBocHkBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetBocHkBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetBocHkBankInterestRate----------------");
     return output;
   }
 }
@@ -70,7 +80,7 @@ export async function GetBocHkBankInterestRate(browser: puppeteer.Browser) {
 function getSavingsDetail(html: string) {
   const $ = cheerio.load(html);
   const tbody = $("#depositRates_form .width-100-percent tbody");
-  return tbody.find("tr").eq(3).find("td").eq(1).text().trim();
+  return FormatRate(tbody.find("tr").eq(3).find("td").eq(1).text());
 }
 
 /**
@@ -89,11 +99,11 @@ function getDepositDetail(html: string) {
 function getDetailWithHKD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
-  const tableRow = $("#ui-id-2 tbody tr").eq(1);
-  const tableDataCell = $(tableRow).find("td");
-  output["3M"] = $(tableDataCell).eq(2).text().trim();
-  output["6M"] = $(tableDataCell).eq(3).text().trim();
-  output["12M"] = $(tableDataCell).eq(4).text().trim();
+  const tr = $("#ui-id-2 tbody tr").eq(1);
+  const td = $(tr).find("td");
+  output["3M"] = FormatRate($(td).eq(2).text());
+  output["6M"] = FormatRate($(td).eq(3).text());
+  output["12M"] = FormatRate($(td).eq(4).text());
 
   return {
     title: "",
@@ -105,11 +115,11 @@ function getDetailWithHKD(html: string) {
 function getDetailWithUSD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
-  const tableRow = $("#ui-id-2 tbody tr").eq(3);
-  const tableDataCell = $(tableRow).find("td");
-  output["3M"] = $(tableDataCell).eq(2).text().trim();
-  output["6M"] = $(tableDataCell).eq(3).text().trim();
-  output["12M"] = $(tableDataCell).eq(4).text().trim();
+  const tr = $("#ui-id-2 tbody tr").eq(3);
+  const td = $(tr).find("td");
+  output["3M"] = FormatRate($(td).eq(2).text());
+  output["6M"] = FormatRate($(td).eq(3).text());
+  output["12M"] = FormatRate($(td).eq(4).text());
 
   return {
     title: "",
@@ -121,11 +131,11 @@ function getDetailWithUSD(html: string) {
 function getDetailWithCNY(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
-  const tableRow = $("#ui-id-2 tbody tr").eq(5);
-  const tableDataCell = $(tableRow).find("td");
-  output["3M"] = $(tableDataCell).eq(2).text().trim();
-  output["6M"] = $(tableDataCell).eq(3).text().trim();
-  output["12M"] = $(tableDataCell).eq(4).text().trim();
+  const tr = $("#ui-id-2 tbody tr").eq(5);
+  const td = $(tr).find("td");
+  output["3M"] = FormatRate($(td).eq(2).text());
+  output["6M"] = FormatRate($(td).eq(3).text());
+  output["12M"] = FormatRate($(td).eq(4).text());
 
   return {
     title: "",

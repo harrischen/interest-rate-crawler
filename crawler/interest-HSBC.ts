@@ -1,7 +1,8 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
+  FormatRate,
   FormatPeriod,
   GetInterestTemplate,
   FetchWebsiteContent,
@@ -15,16 +16,21 @@ import {
  * @returns
  */
 export async function GetHsbcBankInterestRate(browser: puppeteer.Browser) {
-  const domain = "https://www.hsbc.com.hk";
-  const output = {
-    bankName: "汇丰银行",
-    savingsUrl: `${domain}/zh-hk/investments/market-information/hk/deposit-rate/`,
-    depositUrl: `${domain}/zh-hk/accounts/offers/deposits/`,
+  const output: IGetRateResp = {
+    bankName: "滙豐銀行",
+    group: "1stTierBank",
+    url: "https://www.hsbc.com.hk/zh-hk/",
+    savingsUrl: `https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/`,
+    depositUrl: `https://www.hsbc.com.hk/zh-hk/accounts/offers/deposits/`,
     savings: {
       HKD: "",
+      USD: "",
+      CNY: "",
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
@@ -42,6 +48,9 @@ export async function GetHsbcBankInterestRate(browser: puppeteer.Browser) {
 
     return output;
   } catch (error) {
+    console.log("----------------GetHsbcBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetHsbcBankInterestRate----------------");
     return output;
   }
 }
@@ -57,9 +66,9 @@ function getSavingsDetail(html: string) {
   const cny = $("#content_main_basicTable_15 tbody");
   const usd = $("#content_main_basicTable_23 tbody");
   return {
-    HKD: hkd.find("tr").eq(1).find("td").eq(1).text(),
-    CNY: cny.find("tr").eq(0).find("td").eq(1).text(),
-    USD: usd.find("tr").eq(0).find("td").eq(1).text(),
+    HKD: FormatRate(hkd.find("tr").eq(1).find("td").eq(1).text()),
+    CNY: FormatRate(cny.find("tr").eq(0).find("td").eq(1).text()),
+    USD: FormatRate(usd.find("tr").eq(0).find("td").eq(1).text()),
   };
 }
 
@@ -83,21 +92,21 @@ function getDepositDetail(html: string) {
  */
 function getPremierWithHKD(html: string) {
   const $ = cheerio.load(html);
-  const rates = GetInterestTemplate();
+  const output = GetInterestTemplate();
   const tbody = $("#content_main_basicTable_1 tbody");
   tbody.find("tr").each((_, row) => {
     if (_ !== 0) {
       const period = FormatPeriod($(row).find("td").eq(0).text());
-      const rate = $(row).find("td").eq(1).text();
-      if (rate && period && rates[period] === "") {
-        rates[period] = rate.trim();
+      const rate = FormatRate($(row).find("td").eq(1).text());
+      if (rate && period && output[period] === "") {
+        output[period] = rate;
       }
     }
   });
   return {
     title: "滙豐卓越理財尊尚客戶",
     min: "10000",
-    rates: FormatInterestOutput(rates),
+    rates: FormatInterestOutput(output),
   };
 }
 
@@ -108,21 +117,21 @@ function getPremierWithHKD(html: string) {
  */
 function getOneWithHKD(html: string) {
   const $ = cheerio.load(html);
-  const rates = GetInterestTemplate();
+  const output = GetInterestTemplate();
   const tbody = $("#content_main_basicTable_3 tbody");
   tbody.find("tr").each((_, row) => {
     if (_ !== 0) {
       const period = FormatPeriod($(row).find("td").eq(0).text());
-      const rate = $(row).find("td").eq(1).text();
-      if (rate && period && rates[period] === "") {
-        rates[period] = rate.trim();
+      const rate = FormatRate($(row).find("td").eq(1).text());
+      if (rate && period && output[period] === "") {
+        output[period] = rate;
       }
     }
   });
   return {
     title: "滙豐One",
     min: "10000",
-    rates: FormatInterestOutput(rates),
+    rates: FormatInterestOutput(output),
   };
 }
 
@@ -133,21 +142,21 @@ function getOneWithHKD(html: string) {
  */
 function getPremierWithUSD(html: string) {
   const $ = cheerio.load(html);
-  const rates = GetInterestTemplate();
+  const output = GetInterestTemplate();
   const tbody = $("#content_main_basicTable_9 tbody");
   tbody.find("tr").each((_, row) => {
     if (_ !== 0) {
       const period = FormatPeriod($(row).find("td").eq(0).text());
-      const rate = $(row).find("td").eq(1).text();
-      if (rate && period && rates[period] === "") {
-        rates[period] = rate.trim();
+      const rate = FormatRate($(row).find("td").eq(1).text());
+      if (rate && period && output[period] === "") {
+        output[period] = rate;
       }
     }
   });
   return {
     title: "滙豐卓越理財尊尚客戶",
     min: "2000",
-    rates: FormatInterestOutput(rates),
+    rates: FormatInterestOutput(output),
   };
 }
 
@@ -158,21 +167,21 @@ function getPremierWithUSD(html: string) {
  */
 function getOneWithUSD(html: string) {
   const $ = cheerio.load(html);
-  const rates = GetInterestTemplate();
+  const output = GetInterestTemplate();
   const tbody = $("#content_main_basicTable_11 tbody");
   tbody.find("tr").each((_, row) => {
     if (_ !== 0) {
       const period = FormatPeriod($(row).find("td").eq(0).text());
-      const rate = $(row).find("td").eq(1).text();
-      if (rate && period && rates[period] === "") {
-        rates[period] = rate.trim();
+      const rate = FormatRate($(row).find("td").eq(1).text());
+      if (rate && period && output[period] === "") {
+        output[period] = rate;
       }
     }
   });
   return {
     title: "滙豐One",
     min: "2000",
-    rates: FormatInterestOutput(rates),
+    rates: FormatInterestOutput(output),
   };
 }
 
@@ -183,19 +192,19 @@ function getOneWithUSD(html: string) {
  */
 function getPremierWithCNY(html: string) {
   const $ = cheerio.load(html);
-  const rates = GetInterestTemplate();
+  const output = GetInterestTemplate();
   const tbody = $("#content_main_basicTable_17 tbody");
   tbody.find("tr").each((_, row) => {
     const period = FormatPeriod($(row).find("td").eq(0).text());
-    const rate = $(row).find("td").eq(1).text();
-    if (rate && period && rates[period] === "") {
-      rates[period] = rate.trim();
+    const rate = FormatRate($(row).find("td").eq(1).text());
+    if (rate && period && output[period] === "") {
+      output[period] = rate;
     }
   });
   return {
     title: "滙豐卓越理財尊尚客戶",
     min: "10000",
-    rates: FormatInterestOutput(rates),
+    rates: FormatInterestOutput(output),
   };
 }
 
@@ -206,18 +215,18 @@ function getPremierWithCNY(html: string) {
  */
 function getOneWithCNY(html: string) {
   const $ = cheerio.load(html);
-  const rates = GetInterestTemplate();
+  const output = GetInterestTemplate();
   const tbody = $("#content_main_basicTable_19 tbody");
   tbody.find("tr").each((_, row) => {
     const period = FormatPeriod($(row).find("td").eq(0).text());
-    const rate = $(row).find("td").eq(1).text();
-    if (rate && period && rates[period] === "") {
-      rates[period] = rate.trim();
+    const rate = FormatRate($(row).find("td").eq(1).text());
+    if (rate && period && output[period] === "") {
+      output[period] = rate;
     }
   });
   return {
     title: "滙豐One",
     min: "10000",
-    rates: FormatInterestOutput(rates),
+    rates: FormatInterestOutput(output),
   };
 }

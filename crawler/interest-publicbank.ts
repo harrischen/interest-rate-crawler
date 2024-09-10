@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FormatRate,
   FetchWebsiteContent,
@@ -15,8 +15,9 @@ import {
  * @returns
  */
 export async function GetPublicBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "大众银行",
+  const output: IGetRateResp = {
+    group: "OtherTraditionalBank",
+    bankName: "大眾銀行",
     savingsUrl: `https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates`,
     depositUrl: `https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates`,
     url: "https://www.publicbank.com.hk/tc/",
@@ -27,6 +28,8 @@ export async function GetPublicBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
@@ -45,6 +48,9 @@ export async function GetPublicBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetPublicBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetPublicBankInterestRate----------------");
     return output;
   }
 }
@@ -61,7 +67,7 @@ function getSavingsDetail(html: string) {
     .siblings(".table");
   const tr = table.find("tbody").find("tr");
   return {
-    HKD: FormatRate(tr.eq(0).find("td").eq(1).text().trim()),
+    HKD: FormatRate(tr.eq(0).find("td").eq(1).text()),
     CNY: "",
     USD: "",
   };

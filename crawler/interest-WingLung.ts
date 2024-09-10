@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FetchWebsiteContent,
   GetInterestTemplate,
@@ -16,11 +16,12 @@ import {
  * @returns
  */
 export async function GetWingLungBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "招商永隆银行",
+  const output: IGetRateResp = {
+    bankName: "招商永隆銀行",
+    group: "OtherTraditionalBank",
+    url: "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
     savingsUrl: "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp",
     depositUrl: "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp",
-    url: "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
     savings: {
       HKD: "",
       USD: "",
@@ -28,24 +29,19 @@ export async function GetWingLungBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
-    // 获取活期利率信息
-    const savingsContent = await FetchWebsiteContent(
-      browser,
-      output.savingsUrl
-    );
-    output.savings = getSavingsDetail(savingsContent);
-
-    // 获取定期利率信息
-    const depositContent = await FetchWebsiteContent(
-      browser,
-      output.depositUrl
-    );
-    output.deposit = getDepositDetail(depositContent);
+    const htmlContent = await FetchWebsiteContent(browser, output.depositUrl);
+    output.savings = getSavingsDetail(htmlContent);
+    output.deposit = getDepositDetail(htmlContent);
     return output;
   } catch (error) {
+    console.log("----------------GetWingLungBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetWingLungBankInterestRate----------------");
     return output;
   }
 }
@@ -64,9 +60,9 @@ function getSavingsDetail(html: string) {
   const cny = tbody.find('td:contains("人民幣 (RMB)")');
   const usd = tbody.find('td:contains("美元 (USD)")');
   return {
-    HKD: FormatRate(hkd.find("tr").eq(4).find("td").eq(1).text().trim()),
-    CNY: FormatRate(cny.parent("tr").find("td").eq(2).text().trim()),
-    USD: FormatRate(usd.parent("tr").find("td").eq(2).text().trim()),
+    HKD: FormatRate(hkd.find("tr").eq(4).find("td").eq(1).text()),
+    CNY: FormatRate(cny.parent("tr").find("td").eq(2).text()),
+    USD: FormatRate(usd.parent("tr").find("td").eq(2).text()),
   };
 }
 
@@ -95,10 +91,10 @@ function getDetailWithHKD(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   table.find("tr").each((_, row) => {
     if (_ >= 2) {
-      const period = FormatPeriod($(row).find("td").eq(0).text().trim());
+      const period = FormatPeriod($(row).find("td").eq(0).text());
       const rate = $(row).find("td").eq(2).html()?.split("<br>")?.[1];
       if (period && rate && output[period] === "") {
-        output[period] = rate.trim();
+        output[period] = FormatRate(rate);
       }
     }
   });
@@ -122,10 +118,10 @@ function getDetailWithUSD(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   table.find("tr").each((_, row) => {
     if (_ >= 2) {
-      const period = FormatPeriod($(row).find("td").eq(0).text().trim());
+      const period = FormatPeriod($(row).find("td").eq(0).text());
       const rate = $(row).find("td").eq(2).html()?.split("<br>")?.[1];
       if (period && rate && output[period] === "") {
-        output[period] = rate.trim();
+        output[period] = FormatRate(rate);
       }
     }
   });
@@ -149,10 +145,10 @@ function getDetailWithCNY(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   table.find("tr").each((_, row) => {
     if (_ >= 2) {
-      const period = FormatPeriod($(row).find("td").eq(0).text().trim());
+      const period = FormatPeriod($(row).find("td").eq(0).text());
       const rate = $(row).find("td").eq(2).html()?.split("<br>")?.[1];
       if (period && rate && output[period] === "") {
-        output[period] = rate.trim();
+        output[period] = FormatRate(rate);
       }
     }
   });

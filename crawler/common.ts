@@ -20,6 +20,7 @@ export async function FetchWebsiteContent(
     });
     await new Promise((resolve) => setTimeout(resolve, 500));
     const htmlContent = await page.content();
+    await page.close();
     return htmlContent;
   } catch (error) {
     console.error(`Error fetching the page: ${error}`);
@@ -32,7 +33,7 @@ export async function FetchWebsiteContent(
  * @param data
  * @param filename
  */
-export function SaveToJsonFile(data: IBankListResp[], filename: string): void {
+export function SaveToJsonFile(data: any, filename: string): void {
   if (fs.existsSync(filename)) {
     fs.unlinkSync(filename);
   }
@@ -66,7 +67,7 @@ export function FormatPeriod(period: string): string {
  * @returns
  */
 export function FormatRate(val: string): string {
-  return val;
+  return val.trim().replace("%", "");
 }
 
 function PeriodMap(title: string) {
@@ -126,5 +127,5 @@ export function FormatInterestOutput(param: { [key: string]: string }) {
 export function ExtractPercentage(input: string) {
   const regex = /(\d+(\.\d+)?)%/;
   const match = input.match(regex);
-  return match ? match[0] : "";
+  return match ? FormatRate(match[0]) : "";
 }

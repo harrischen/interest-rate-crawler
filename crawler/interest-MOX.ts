@@ -9,10 +9,10 @@ import { GetInterestTemplate, FormatInterestOutput } from "./common";
  * @param url
  * @returns
  */
-export async function GetCiticBankInterestRate(browser: puppeteer.Browser) {
+export async function GetMoxBankInterestRate(browser: puppeteer.Browser) {
   const output: IGetRateResp = {
-    group: "OtherTraditionalBank",
-    bankName: "中信銀行(国际)",
+    group: "VirtualBank",
+    bankName: "Mox",
     savingsUrl: ``,
     depositUrl: ``,
     url: "https://www.cncbinternational.com/home/tc/index.jsp",

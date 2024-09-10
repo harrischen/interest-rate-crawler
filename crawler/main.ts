@@ -1,7 +1,8 @@
 import * as puppeteer from "puppeteer";
-import { GetZaBankInterestRate } from "./interest-zabank";
-import { GetFusionBankInterestRate } from "./interest-fusionbank";
-import { GetAirStarBankInterestRate } from "./interest-airstarbank";
+import { GetAirStarBankInterestRate } from "./interest-Airstar";
+import { GetHaseBankInterestRate } from "./interest-HASE";
+import { GetHsbcBankInterestRate } from "./interest-HSBC";
+import { GetLiviBankInterestRate } from "./interest-Livi";
 
 export async function main() {
   const browser = await puppeteer.launch({
@@ -25,9 +26,21 @@ export async function main() {
   // console.log(zaBank);
   // console.log("----------------zaBank----------------");
 
-  const airStarBank = await GetAirStarBankInterestRate(browser);
-  console.log(JSON.stringify(airStarBank, null, 2));
-  console.log("----------------airStarBank----------------");
+  // const airStarBank = await GetAirStarBankInterestRate(browser);
+  // console.log(JSON.stringify(airStarBank, null, 2));
+  // console.log("----------------airStarBank----------------");
+
+  // const haseBank = await GetHaseBankInterestRate(browser);
+  // console.log(JSON.stringify(haseBank, null, 2));
+  // console.log("----------------haseBank----------------");
+
+  // const hsbcBank = await GetHsbcBankInterestRate(browser);
+  // console.log(JSON.stringify(hsbcBank, null, 2));
+  // console.log("----------------hsbcBank----------------");
+
+  const liviBank = await GetLiviBankInterestRate(browser);
+  console.log(JSON.stringify(liviBank, null, 2));
+  console.log("----------------liviBank----------------");
 
   await browser.close();
 }

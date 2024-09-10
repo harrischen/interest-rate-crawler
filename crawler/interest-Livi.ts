@@ -4,6 +4,7 @@ import { IGetRateResp, IInterestResp } from "./type";
 import {
   FormatRate,
   FormatPeriod,
+  ExtractPercentage,
   FetchWebsiteContent,
   GetInterestTemplate,
   FormatInterestOutput,
@@ -15,13 +16,13 @@ import {
  * @param url
  * @returns
  */
-export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
+export async function GetLiviBankInterestRate(browser: puppeteer.Browser) {
   const output: IGetRateResp = {
-    bankName: "匯立銀行",
     group: "VirtualBank",
-    url: "https://www.welab.bank/zh/",
-    savingsUrl: "https://www.welab.bank/zh/feature/gosave_2/",
-    depositUrl: "https://www.welab.bank/zh/feature/gosave_2/",
+    bankName: "理慧銀行",
+    url: "https://www.livibank.com/zh_HK/",
+    savingsUrl: "https://www.livibank.com/zh_HK/features/livisave.html",
+    depositUrl: "https://www.livibank.com/zh_HK/features/livisave.html",
     savings: {
       HKD: "",
       USD: "",
@@ -39,9 +40,9 @@ export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(htmlContent);
     return output;
   } catch (error) {
-    console.log("----------------GetWeLabBankInterestRate----------------");
+    console.log("----------------GetLiviBankInterestRate----------------");
     console.log(error);
-    console.log("----------------GetWeLabBankInterestRate----------------");
+    console.log("----------------GetLiviBankInterestRate----------------");
     return output;
   }
 }
@@ -52,10 +53,14 @@ export async function GetWeLabBankInterestRate(browser: puppeteer.Browser) {
  * @returns
  */
 function getSavingsDetail(html: string) {
+  const $ = cheerio.load(html);
+  const hkd = $("#table-港幣 tbody tr").eq(0).find("td").eq(1).text();
+  const usd = $("#table-美元 tbody tr").eq(0).find("td").eq(1).text();
+  const cny = $("#table-人民幣 tbody tr").eq(0).find("td").eq(1).text();
   return {
-    HKD: "",
-    USD: "",
-    CNY: "",
+    HKD: ExtractPercentage(hkd),
+    USD: ExtractPercentage(usd),
+    CNY: ExtractPercentage(cny),
   };
 }
 
@@ -66,24 +71,20 @@ function getSavingsDetail(html: string) {
  */
 function getDepositDetail(html: string) {
   return {
-    HKD: [getDetailWithHKD(html)],
+    HKD: [getLowLevelWithHKD(html), getHighLevelWithHKD(html)],
     CNY: [getDetailWithCNY(html)],
     USD: [getDetailWithUSD(html)],
   };
 }
 
-function getDetailWithHKD(html: string) {
+function getLowLevelWithHKD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
 
-  // 找出指定的table
-  const tr = $(".data-perks .d-md-block tbody tr");
-
-  // 通过遍历tr后再遍历td的形式获取相应的存期入利率
+  const tr = $(".time-deposit-rate-table-container-desktop tbody tr");
   tr.each((_, row) => {
-    const tableDataCell = $(row).find("td");
-    const rate = FormatRate($(tableDataCell).eq(1).text());
-    const period = FormatPeriod($(tableDataCell).eq(0).text());
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(1).text());
     if (rate && period && output[period] === "") {
       output[period] = rate;
     }
@@ -91,7 +92,27 @@ function getDetailWithHKD(html: string) {
 
   return {
     title: "",
-    min: "10",
+    min: "500",
+    rates: FormatInterestOutput(output),
+  };
+}
+
+function getHighLevelWithHKD(html: string) {
+  const $ = cheerio.load(html);
+  const output = GetInterestTemplate();
+
+  const tr = $(".time-deposit-rate-table-container-desktop tbody tr");
+  tr.each((_, row) => {
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(2).text());
+    if (rate && period && output[period] === "") {
+      output[period] = rate;
+    }
+  });
+
+  return {
+    title: "",
+    min: "100000",
     rates: FormatInterestOutput(output),
   };
 }

@@ -20,7 +20,7 @@ function parseHtmlContent(html: string): IBankListResp[] {
   const output: IBankListResp[] = [];
 
   $(".cell-body").each((index, element) => {
-    const bankName = $(element).text().trim();
+    const bankName = $(element).text();
     const bankLink = $(element).find("a").attr("href") || null;
 
     if (bankName && bankLink) {

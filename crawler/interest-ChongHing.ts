@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FormatRate,
   FetchWebsiteContent,
@@ -15,11 +15,12 @@ import {
  * @returns
  */
 export async function GetChBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
-    bankName: "创兴银行",
+  const output: IGetRateResp = {
+    bankName: "創興銀行",
+    group: "OtherTraditionalBank",
+    url: "https://www.chbank.com/tc/homepage.shtml",
     savingsUrl: `https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml?tab=cloudRate`,
     depositUrl: `https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml?tab=cloudRate`,
-    url: "https://www.chbank.com/tc/homepage.shtml",
     savings: {
       HKD: "",
       USD: "",
@@ -27,6 +28,8 @@ export async function GetChBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
@@ -45,6 +48,9 @@ export async function GetChBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetChBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetChBankInterestRate----------------");
     return output;
   }
 }
@@ -59,9 +65,9 @@ function getSavingsDetail(html: string) {
   const tbody = $("#ERateTable3 tbody");
 
   return {
-    HKD: FormatRate(tbody.find("tr[title=HKD]").find("td").eq(1).text().trim()),
-    CNY: FormatRate(tbody.find("tr[title=RMB]").find("td").eq(1).text().trim()),
-    USD: FormatRate(tbody.find("tr[title=USD]").find("td").eq(1).text().trim()),
+    HKD: FormatRate(tbody.find("tr[title=HKD]").find("td").eq(1).text()),
+    CNY: FormatRate(tbody.find("tr[title=RMB]").find("td").eq(1).text()),
+    USD: FormatRate(tbody.find("tr[title=USD]").find("td").eq(1).text()),
   };
 }
 
@@ -86,12 +92,12 @@ function getDetailWithHKD(html: string) {
   const tbody = $("#ERateTable tbody");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
-  const rateRow = tbody.find("tr[title=HKD]").eq(0);
-  output["7D"] = rateRow.find("td").eq(3).text().trim();
-  output["1M"] = rateRow.find("td").eq(5).text().trim();
-  output["3M"] = rateRow.find("td").eq(7).text().trim();
-  output["6M"] = rateRow.find("td").eq(8).text().trim();
-  output["12M"] = rateRow.find("td").eq(10).text().trim();
+  const tr = tbody.find("tr[title=HKD]").eq(0);
+  output["7D"] = FormatRate(tr.find("td").eq(3).text());
+  output["1M"] = FormatRate(tr.find("td").eq(5).text());
+  output["3M"] = FormatRate(tr.find("td").eq(7).text());
+  output["6M"] = FormatRate(tr.find("td").eq(8).text());
+  output["12M"] = FormatRate(tr.find("td").eq(10).text());
 
   return {
     title: "",
@@ -108,12 +114,12 @@ function getDetailWithUSD(html: string) {
   const tbody = $("#ERateTable tbody");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
-  const rateRow = tbody.find("tr[title=USD]").eq(0);
-  output["7D"] = rateRow.find("td").eq(3).text().trim();
-  output["1M"] = rateRow.find("td").eq(5).text().trim();
-  output["3M"] = rateRow.find("td").eq(7).text().trim();
-  output["6M"] = rateRow.find("td").eq(8).text().trim();
-  output["12M"] = rateRow.find("td").eq(10).text().trim();
+  const tr = tbody.find("tr[title=USD]").eq(0);
+  output["7D"] = FormatRate(tr.find("td").eq(3).text());
+  output["1M"] = FormatRate(tr.find("td").eq(5).text());
+  output["3M"] = FormatRate(tr.find("td").eq(7).text());
+  output["6M"] = FormatRate(tr.find("td").eq(8).text());
+  output["12M"] = FormatRate(tr.find("td").eq(10).text());
 
   return {
     title: "",
@@ -130,12 +136,12 @@ function getDetailWithCNY(html: string) {
   const tbody = $("#ERateTable tbody");
 
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
-  const rateRow = tbody.find("tr[title=RMB]").eq(0);
-  output["7D"] = rateRow.find("td").eq(3).text().trim();
-  output["1M"] = rateRow.find("td").eq(5).text().trim();
-  output["3M"] = rateRow.find("td").eq(7).text().trim();
-  output["6M"] = rateRow.find("td").eq(8).text().trim();
-  output["12M"] = rateRow.find("td").eq(10).text().trim();
+  const tr = tbody.find("tr[title=RMB]").eq(0);
+  output["7D"] = FormatRate(tr.find("td").eq(3).text());
+  output["1M"] = FormatRate(tr.find("td").eq(5).text());
+  output["3M"] = FormatRate(tr.find("td").eq(7).text());
+  output["6M"] = FormatRate(tr.find("td").eq(8).text());
+  output["12M"] = FormatRate(tr.find("td").eq(10).text());
 
   return {
     title: "",

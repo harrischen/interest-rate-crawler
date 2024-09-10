@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./type";
 import {
   FetchWebsiteContent,
   GetInterestTemplate,
@@ -16,8 +16,9 @@ import {
  * @returns
  */
 export async function GetDbsBankInterestRate(browser: puppeteer.Browser) {
-  const output = {
+  const output: IGetRateResp = {
     bankName: "星展銀行",
+    group: "OtherTraditionalBank",
     savingsUrl: "https://www.dbs.com.hk/personal-zh/ratesfees-tiered.page",
     depositUrl: "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo",
     url: "https://www.dbs.com.hk/personal-zh/default.page",
@@ -28,6 +29,8 @@ export async function GetDbsBankInterestRate(browser: puppeteer.Browser) {
     },
     deposit: {
       HKD: [] as IInterestResp[],
+      USD: [] as IInterestResp[],
+      CNY: [] as IInterestResp[],
     },
   };
   try {
@@ -46,6 +49,9 @@ export async function GetDbsBankInterestRate(browser: puppeteer.Browser) {
     output.deposit = getDepositDetail(depositContent);
     return output;
   } catch (error) {
+    console.log("----------------GetDbsBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetDbsBankInterestRate----------------");
     return output;
   }
 }
@@ -57,9 +63,9 @@ export async function GetDbsBankInterestRate(browser: puppeteer.Browser) {
  */
 function getSavingsDetail(html: string) {
   const $ = cheerio.load(html);
-  const hkd = $('h2:contains("港元儲蓄戶口")').next("table").find("tbody");
+  const tbody = $('h2:contains("港元儲蓄戶口")').next("table").find("tbody");
   return {
-    HKD: hkd.find("tr").eq(0).find("td").eq(0).text().trim(),
+    HKD: FormatRate(tbody.find("tr").eq(0).find("td").eq(0).text()),
     CNY: "",
     USD: "",
   };
@@ -88,8 +94,8 @@ function getDetailWithHKD(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   table.find("tr").each((_, row) => {
     if (_ >= 3) {
-      const period = FormatPeriod($(row).find("td").eq(0).text().trim());
-      const rate = FormatRate($(row).find("td").eq(1).text().trim());
+      const period = FormatPeriod($(row).find("td").eq(0).text());
+      const rate = FormatRate($(row).find("td").eq(1).text());
       if (period && rate && output[period] === "") {
         output[period] = rate;
       }
@@ -113,8 +119,8 @@ function getDetailWithUSD(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   table.find("tr").each((_, row) => {
     if (_ >= 3) {
-      const period = FormatPeriod($(row).find("td").eq(0).text().trim());
-      const rate = FormatRate($(row).find("td").eq(1).text().trim());
+      const period = FormatPeriod($(row).find("td").eq(0).text());
+      const rate = FormatRate($(row).find("td").eq(1).text());
       if (period && rate && output[period] === "") {
         output[period] = rate;
       }
@@ -138,8 +144,8 @@ function getDetailWithCNY(html: string) {
   // 通过遍历tr后再遍历td的形式获取相应的存期入利率
   table.find("tr").each((_, row) => {
     if (_ >= 3) {
-      const period = FormatPeriod($(row).find("td").eq(0).text().trim());
-      const rate = FormatRate($(row).find("td").eq(1).text().trim());
+      const period = FormatPeriod($(row).find("td").eq(0).text());
+      const rate = FormatRate($(row).find("td").eq(1).text());
       if (period && rate && output[period] === "") {
         output[period] = rate;
       }
