@@ -36,7 +36,7 @@ export async function GetZaBankInterestRate(browser: puppeteer.Browser) {
     const page = await browser.newPage();
     await page.goto(output.depositUrl, {
       waitUntil: "networkidle2",
-      timeout: 1000 * 60 * 5,
+      timeout: 0,
     });
 
     // 活期

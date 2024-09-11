@@ -6,6 +6,7 @@ import {
   GetInterestTemplate,
   FormatInterestOutput,
   FormatRate,
+  WaitForElement,
 } from "./common";
 
 /**
@@ -37,22 +38,22 @@ export async function GetBocHkBankInterestRate(browser: puppeteer.Browser) {
     const savingsPage = await browser.newPage();
     await savingsPage.goto(output.savingsUrl, {
       waitUntil: "networkidle2",
-      timeout: 1000 * 60 * 5,
+      timeout: 0,
     });
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await WaitForElement(savingsPage, "#depositRates_form_currency_field");
     await savingsPage.waitForSelector("#depositRates_form_currency_field");
     await savingsPage.select("#depositRates_form_currency_field", "HKD");
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const hkdSavingsContent = await savingsPage.content();
     output.savings.HKD = getSavingsDetail(hkdSavingsContent);
 
     await savingsPage.select("#depositRates_form_currency_field", "USD");
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const usdSavingsContent = await savingsPage.content();
     output.savings.USD = getSavingsDetail(usdSavingsContent);
 
     await savingsPage.select("#depositRates_form_currency_field", "CNY");
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const cnySavingsContent = await savingsPage.content();
     output.savings.CNY = getSavingsDetail(cnySavingsContent);
     await savingsPage.close();

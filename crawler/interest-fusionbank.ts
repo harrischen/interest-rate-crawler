@@ -45,7 +45,7 @@ export async function GetFusionBankInterestRate(browser: puppeteer.Browser) {
     const depositPage = await browser.newPage();
     await depositPage.goto(output.depositUrl, {
       waitUntil: "networkidle2",
-      timeout: 1000 * 60 * 5,
+      timeout: 0,
     });
 
     await new Promise((resolve) => setTimeout(resolve, 500));

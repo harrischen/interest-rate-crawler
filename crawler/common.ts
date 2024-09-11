@@ -1,6 +1,55 @@
 import * as fs from "fs";
-import { IBankListResp } from "./type";
 import * as puppeteer from "puppeteer";
+
+const blockedResourceTypes = [
+  "image",
+  "media",
+  "font",
+  "texttrack",
+  "object",
+  "beacon",
+  "csp_report",
+  "imageset",
+];
+
+const skippedResources = [
+  "quantserve",
+  "adzerk",
+  "doubleclick",
+  "adition",
+  "exelator",
+  "sharethrough",
+  "cdn.api.twitter",
+  "google-analytics",
+  "googletagmanager",
+  "google",
+  "fontawesome",
+  "facebook",
+  "analytics",
+  "optimizely",
+  "clicktale",
+  "mixpanel",
+  "zedo",
+  "clicksor",
+  "tiqcdn",
+];
+
+export async function WaitForElement(
+  page: puppeteer.Page,
+  selector: string,
+  retries = 5
+) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await page.waitForSelector(selector, { timeout: 5000 });
+      return true;
+    } catch (error) {
+      console.log(`Retry ${i + 1}: ${selector} not found, retrying...`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+  throw new Error(`Element ${selector} not found after ${retries} retries`);
+}
 
 /**
  * 通过 puppeteer 访问指定的网站
@@ -16,8 +65,28 @@ export async function FetchWebsiteContent(
     const page = await browser.newPage();
     await page.goto(url, {
       waitUntil: "networkidle2",
-      timeout: 1000 * 60 * 5,
+      timeout: 0,
     });
+    // 开启请求拦截功能
+    await page.setRequestInterception(true);
+
+    page.on("request", (req) => {
+      const url = req.url();
+      const resourceType = req.resourceType();
+
+      const shouldBlockResourceType =
+        blockedResourceTypes.includes(resourceType);
+      const shouldSkipResource = skippedResources.some((resource) =>
+        url.includes(resource)
+      );
+
+      if (shouldBlockResourceType || shouldSkipResource) {
+        req.abort();
+      } else {
+        req.continue();
+      }
+    });
+
     await new Promise((resolve) => setTimeout(resolve, 500));
     const htmlContent = await page.content();
     await page.close();

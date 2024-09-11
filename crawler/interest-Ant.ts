@@ -38,7 +38,7 @@ export async function GetAntBankInterestRate(browser: puppeteer.Browser) {
     const savingsPage = await browser.newPage();
     await savingsPage.goto(output.savingsUrl, {
       waitUntil: "networkidle2",
-      timeout: 1000 * 60 * 5,
+      timeout: 0,
     });
 
     await savingsPage.waitForSelector(".subTitle___jvNLW");
@@ -52,7 +52,7 @@ export async function GetAntBankInterestRate(browser: puppeteer.Browser) {
     const depositPage = await browser.newPage();
     await depositPage.goto(output.depositUrl, {
       waitUntil: "networkidle2",
-      timeout: 1000 * 60 * 5,
+      timeout: 0,
     });
 
     // 蚂蚁的页面，默认就是USD
