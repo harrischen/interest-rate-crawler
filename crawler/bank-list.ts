@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { IBankListResp } from "./type";
+import { IBankListResp } from "./../type";
 import * as puppeteer from "puppeteer";
 import { FetchWebsiteContent, SaveToJsonFile } from "./common";
 

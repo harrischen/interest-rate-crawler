@@ -1,3 +1,4 @@
+import path from "path";
 import dayjs from "dayjs";
 import * as puppeteer from "puppeteer";
 import { SaveToJsonFile } from "./common";
@@ -73,7 +74,7 @@ export async function main() {
   ];
 
   const start = new Date().getTime();
-  const time = dayjs().format("YYYYMMDDHH");
+  const time = dayjs().format("YYYYMMDD-HH");
   const resp = await Promise.all(promises);
   const end = new Date().getTime();
   SaveToJsonFile(
@@ -82,7 +83,7 @@ export async function main() {
       end,
       list: resp,
     },
-    `bank-rates__${time}.json`
+    path.join(__dirname, `../public/`, `bank-rates__${time}.json`)
   );
 
   console.log("----------virtualBankBrowser----------");

@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IGetRateResp, IInterestResp } from "./type";
+import { IGetRateResp, IInterestResp } from "./../type";
 import {
   FormatRate,
   FetchWebsiteContent,
