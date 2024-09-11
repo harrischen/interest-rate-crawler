@@ -1,47 +1,101 @@
+import dayjs from "dayjs";
 import * as puppeteer from "puppeteer";
+import { SaveToJsonFile } from "./common";
 import { GetAirStarBankInterestRate } from "./interest-Airstar";
 import { GetHaseBankInterestRate } from "./interest-HASE";
 import { GetHsbcBankInterestRate } from "./interest-HSBC";
 import { GetLiviBankInterestRate } from "./interest-Livi";
+import { GetAntBankInterestRate } from "./interest-Ant";
+import { GetBeaBankInterestRate } from "./interest-BEA";
+import { GetBocHkBankInterestRate } from "./interest-BOCHK";
+import { GetHkCommBankInterestRate } from "./interest-BOCOM";
+import { GetChBankInterestRate } from "./interest-ChongHing";
+import { GetCiticBankInterestRate } from "./interest-CITIC";
+import { GetDbsBankInterestRate } from "./interest-DBS";
+import { GetFuBonBankInterestRate } from "./interest-Fubon";
+import { GetFusionBankInterestRate } from "./interest-FusionBank";
+import { GetMoxBankInterestRate } from "./interest-MOX";
+import { GetPaoBankInterestRate } from "./interest-PAOB";
+import { GetPublicBankInterestRate } from "./interest-PublicBank";
+import { GetScBankInterestRate } from "./interest-SCB";
+import { GetWeLabBankInterestRate } from "./interest-WeLab";
+import { GetWingLungBankInterestRate } from "./interest-WingLung";
+import { GetZaBankInterestRate } from "./interest-ZA";
 
 export async function main() {
-  const browser = await puppeteer.launch({
+  const browserOptions = {
     headless: true,
+    timeout: 0,
+    protocolTimeout: 0,
+    ignoreHTTPSErrors: true,
+    defaultViewport: null,
+    ignoreDefaultArgs: ["--enable-automation"],
     args: [
       "--disable-gpu",
+      "--disable-infobars",
       "--disable-dev-shm-usage",
       "--disable-setuid-sandbox",
+      "--enable-webgl",
+      "--start-maximized",
       "--no-first-run",
       "--no-sandbox",
       "--no-zygote",
       "--single-process",
     ],
-  });
+  };
+  const virtualBankBrowser = await puppeteer.launch(browserOptions);
+  const firstStTierBankBrowser = await puppeteer.launch(browserOptions);
+  const OtherTraditionalBankBrowser = await puppeteer.launch(browserOptions);
 
-  // const fusionBank = await GetFusionBankInterestRate(browser);
-  // console.log(fusionBank);
-  // console.log("----------------fusionBank----------------");
+  const promises = [
+    GetFusionBankInterestRate(virtualBankBrowser),
+    GetLiviBankInterestRate(virtualBankBrowser),
+    GetMoxBankInterestRate(virtualBankBrowser),
+    GetPaoBankInterestRate(virtualBankBrowser),
+    GetWeLabBankInterestRate(virtualBankBrowser),
+    GetZaBankInterestRate(virtualBankBrowser),
+    GetAirStarBankInterestRate(virtualBankBrowser),
+    GetAntBankInterestRate(virtualBankBrowser),
 
-  // const zaBank = await GetZaBankInterestRate(browser);
-  // console.log(zaBank);
-  // console.log("----------------zaBank----------------");
+    GetHsbcBankInterestRate(firstStTierBankBrowser),
+    GetHaseBankInterestRate(firstStTierBankBrowser),
+    GetBocHkBankInterestRate(firstStTierBankBrowser),
+    GetScBankInterestRate(firstStTierBankBrowser),
 
-  // const airStarBank = await GetAirStarBankInterestRate(browser);
-  // console.log(JSON.stringify(airStarBank, null, 2));
-  // console.log("----------------airStarBank----------------");
+    GetDbsBankInterestRate(OtherTraditionalBankBrowser),
+    GetBeaBankInterestRate(OtherTraditionalBankBrowser),
+    GetWingLungBankInterestRate(OtherTraditionalBankBrowser),
+    GetCiticBankInterestRate(OtherTraditionalBankBrowser),
+    GetPublicBankInterestRate(OtherTraditionalBankBrowser),
+    GetHkCommBankInterestRate(OtherTraditionalBankBrowser),
+    GetChBankInterestRate(OtherTraditionalBankBrowser),
+    GetFuBonBankInterestRate(OtherTraditionalBankBrowser),
+  ];
 
-  // const haseBank = await GetHaseBankInterestRate(browser);
-  // console.log(JSON.stringify(haseBank, null, 2));
-  // console.log("----------------haseBank----------------");
+  const start = new Date().getTime();
+  const time = dayjs().format("YYYYMMDDHH");
+  const resp = await Promise.all(promises);
+  const end = new Date().getTime();
+  SaveToJsonFile(
+    {
+      start,
+      end,
+      list: resp,
+    },
+    `bank-rates__${time}.json`
+  );
 
-  // const hsbcBank = await GetHsbcBankInterestRate(browser);
-  // console.log(JSON.stringify(hsbcBank, null, 2));
-  // console.log("----------------hsbcBank----------------");
+  console.log("----------virtualBankBrowser----------");
+  console.log(virtualBankBrowser.debugInfo);
 
-  const liviBank = await GetLiviBankInterestRate(browser);
-  console.log(JSON.stringify(liviBank, null, 2));
-  console.log("----------------liviBank----------------");
+  console.log("----------firstStTierBankBrowser----------");
+  console.log(firstStTierBankBrowser.debugInfo);
 
-  await browser.close();
+  console.log("----------OtherTraditionalBankBrowser----------");
+  console.log(OtherTraditionalBankBrowser.debugInfo);
+
+  await virtualBankBrowser.close();
+  await firstStTierBankBrowser.close();
+  await OtherTraditionalBankBrowser.close();
 }
 main();
