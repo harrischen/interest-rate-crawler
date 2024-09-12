@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IGetRateResp, IInterestResp } from "./../type";
+import { IGetRateData, IInterestResp } from "./../type";
 import {
   FormatRate,
   FetchWebsiteContent,
@@ -15,7 +15,7 @@ import {
  * @returns
  */
 export async function GetChBankInterestRate(browser: puppeteer.Browser) {
-  const output: IGetRateResp = {
+  const output: IGetRateData = {
     bankName: "創興銀行",
     group: "OtherTraditionalBank",
     url: "https://www.chbank.com/tc/homepage.shtml",

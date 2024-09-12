@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IGetRateResp, IInterestResp } from "./../type";
+import { IGetRateData, IInterestResp } from "./../type";
 import {
   FormatRate,
   FormatPeriod,
@@ -16,7 +16,7 @@ import {
  * @returns
  */
 export async function GetAntBankInterestRate(browser: puppeteer.Browser) {
-  const output: IGetRateResp = {
+  const output: IGetRateData = {
     group: "VirtualBank",
     bankName: "蚂蚁銀行",
     url: "https://www.antbank.hk/home?lang=zh_hk",

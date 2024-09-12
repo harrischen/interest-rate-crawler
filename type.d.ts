@@ -11,20 +11,33 @@ export interface IInterestResp {
   };
 }
 
-export interface IGetRateResp {
+export interface IGetRateData {
   bankName: string;
   group: string;
   url: string;
   savingsUrl: string;
   depositUrl: string;
-  savings: {
-    HKD: string;
-    USD: string;
-    CNY: string;
-  };
-  deposit: {
-    HKD: IInterestResp[];
-    USD: IInterestResp[];
-    CNY: IInterestResp[];
+  savings: { [key: string]: string };
+  deposit: { [key: string]: IInterestResp[] };
+}
+
+export interface IGetRateResp {
+  start: string;
+  end: string;
+  list: IGetRateData[];
+}
+
+export interface ITableData {
+  bankName: string;
+  savings: string;
+  url: string;
+  savingsUrl: string;
+  depositUrl: string;
+  deposit: IInterestResp[];
+}
+
+export interface ITableResp {
+  [key: string]: {
+    [key: string]: Array<ITableData>;
   };
 }

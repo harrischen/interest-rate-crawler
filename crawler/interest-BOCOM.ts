@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IGetRateResp, IInterestResp } from "./../type";
+import { IGetRateData, IInterestResp } from "./../type";
 import { GetInterestTemplate, FormatInterestOutput } from "./common";
 
 /**
@@ -10,7 +10,7 @@ import { GetInterestTemplate, FormatInterestOutput } from "./common";
  * @returns
  */
 export async function GetHkCommBankInterestRate(browser: puppeteer.Browser) {
-  const output: IGetRateResp = {
+  const output: IGetRateData = {
     group: "OtherTraditionalBank",
     bankName: "交通銀行(香港)",
     savingsUrl: ``,

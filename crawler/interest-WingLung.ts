@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
-import { IGetRateResp, IInterestResp } from "./../type";
+import { IGetRateData, IInterestResp } from "./../type";
 import {
   FetchWebsiteContent,
   GetInterestTemplate,
@@ -16,7 +16,7 @@ import {
  * @returns
  */
 export async function GetWingLungBankInterestRate(browser: puppeteer.Browser) {
-  const output: IGetRateResp = {
+  const output: IGetRateData = {
     bankName: "招商永隆銀行",
     group: "OtherTraditionalBank",
     url: "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
