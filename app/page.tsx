@@ -39,35 +39,42 @@ export default function BankRatesPage() {
 
   return (
     <>
-      <div className="w-full sticky top-0 left-0 right-0">
-        <div className="max-w-7xl m-auto flex ">
+      <div className="w-full sticky top-0 left-0 right-0 bg-slate-400">
+        <div className="max-w-7xl m-auto flex py-4">
           <div className="w-40">銀行分類</div>
           <div className="flex-1 flex">
-            <div className="w-40">銀行名稱</div>
-            <div className="w-40">活期利率</div>
+            <div className="w-40 px-2">銀行名稱</div>
+            <div className="w-40 px-2">活期利率</div>
             {Object.keys(formattedData.HKD.virtualBank[0].deposit[0].rates).map(
               (i) => (
-                <div key={i} className="flex-1">{i}</div>
+                <div key={i} className="px-2 flex-1">
+                  {i}
+                </div>
               )
             )}
           </div>
         </div>
       </div>
 
-      <div className="w-full max-w-7xl m-auto">
+      <div className="w-full max-w-7xl m-auto text-sm leading-loose	">
         {Object.keys(formattedData).map((currency) => (
           // 按货币进行分类归组
-          <div className="pb-20" key={currency}>
+          <div className="py-4" key={currency}>
             {/* 货币信息 */}
-            <div className="text-4xl font-bold pb-10 text-center">
+            <div className="text-4xl font-bold pb-4 text-center">
               {currency}
             </div>
 
             {Object.keys(formattedData[currency]).map((groupName) => (
               // 按银行类型进行分数归组，比如传统银行、虚拟银行
-              <div key={groupName} className="flex border-b last:border-b-0">
+              <div
+                key={groupName}
+                className="flex py-2 border-b last:border-b-0"
+              >
                 {/* 银行类型 */}
-                <div className="w-40">{formatGroupName(groupName)}</div>
+                <div className="w-40 flex items-center">
+                  {formatGroupName(groupName)}
+                </div>
 
                 <ul className="flex-1">
                   {formattedData[currency][groupName].map((bank) => (
@@ -76,14 +83,21 @@ export default function BankRatesPage() {
                       key={bank.bankName}
                       className="flex hover:bg-slate-200 dark:hover:bg-zinc-700"
                     >
-                      <h3 className="w-40">{bank.bankName}</h3>
-                      <div className="w-40">{bank.savings || "-"}</div>
+                      <h3 className="w-40 px-2 flex items-center">
+                        {bank.bankName}
+                      </h3>
+                      <div className="w-40 px-2 flex items-center">
+                        {bank.savings || "-"}
+                      </div>
                       {/* 每一家银行的定期利率信息(单个币种可能有多种定存利率信息) */}
                       <div className="flex-1">
                         {bank.deposit.map((deposit, idx) => (
                           <ul className="flex" key={idx}>
                             {Object.keys(deposit.rates).map((period) => (
-                              <li className="flex-1" key={period}>
+                              <li
+                                key={period}
+                                className="flex-1 px-2 hover:bg-slate-300 dark:hover:bg-zinc-800"
+                              >
                                 {deposit.rates[period] || "-"}
                               </li>
                             ))}

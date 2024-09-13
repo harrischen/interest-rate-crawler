@@ -19,10 +19,6 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-.sticky {
-  background: rgb(var(--background-rgb));
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;

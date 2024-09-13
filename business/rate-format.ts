@@ -20,12 +20,12 @@ export const formatRateHandler = (list: IGetRateData[]) => {
       firstTierBank: [],
       otherTraditionalBank: [],
     },
-    CNY: {
+    USD: {
       virtualBank: [],
       firstTierBank: [],
       otherTraditionalBank: [],
     },
-    USD: {
+    CNY: {
       virtualBank: [],
       firstTierBank: [],
       otherTraditionalBank: [],

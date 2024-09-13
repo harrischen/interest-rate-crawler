@@ -74,7 +74,7 @@ export async function main() {
   ];
 
   const start = new Date().getTime();
-  const time = dayjs().format("YYYYMMDD-HH");
+  const time = dayjs().format("YYYYMMDD");
   const resp = await Promise.all(promises);
   const end = new Date().getTime();
   SaveToJsonFile(
