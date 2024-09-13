@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
 import { IGetRateData, IInterestResp } from "./../type";
-import { GetInterestTemplate, FormatInterestOutput } from "./common";
+import { GetInterestTemplate, FormatInterestOutput, FetchWebsiteContent } from "./common";
 
 /**
  * 获取利率信息
@@ -27,7 +27,18 @@ export async function GetHkCommBankInterestRate(browser: puppeteer.Browser) {
       CNY: [] as IInterestResp[],
     },
   };
-  return output;
+
+  try {
+    const htmlContent = await FetchWebsiteContent(browser, output.url);
+    output.savings = getSavingsDetail(htmlContent);
+    output.deposit = getDepositDetail(htmlContent);
+    return output;
+  } catch (error) {
+    console.log("----------------GetHkCommBankInterestRate----------------");
+    console.log(error);
+    console.log("----------------GetHkCommBankInterestRate----------------");
+    return output;
+  }
 }
 
 /**
