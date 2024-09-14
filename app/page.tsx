@@ -12,11 +12,6 @@ export default function BankRatesPage() {
     return data && data.list ? formatRateHandler(data.list) : null;
   }, [data]);
 
-  const hoverHandler = (e: React.MouseEvent) => {
-    const isBankName = e.currentTarget.className.indexOf("bank-name") !== -1;
-    console.log(e);
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -46,10 +41,10 @@ export default function BankRatesPage() {
     <>
       <div className="w-full sticky top-0 left-0 right-0 bg-slate-400">
         <div className="max-w-7xl m-auto flex py-4 cursor-pointer page-header">
-          <div className="w-40 px-2 group-title">銀行分類</div>
+          <div className="w-40 px-2 group-title">Classification</div>
           <div className="flex-1 flex">
-            <div className="w-40 px-2 bank-name">銀行名稱</div>
-            <div className="w-40 px-2 bank-savings">活期利率</div>
+            <div className="w-40 px-2 bank-name">Bank Name</div>
+            <div className="w-40 px-2 bank-savings">Savings</div>
             {Object.keys(formattedData.HKD.virtualBank[0].deposit[0].rates).map(
               (i) => (
                 <div key={i} className={`px-2 flex-1 bank-${i}`}>
@@ -58,6 +53,7 @@ export default function BankRatesPage() {
               )
             )}
           </div>
+          <div className="w-20 px-2 text-right">Min Amt</div>
         </div>
       </div>
 
@@ -81,26 +77,32 @@ export default function BankRatesPage() {
                   {formatGroupName(groupName)}
                 </div>
 
-                <ul className="flex-1">
+                <div className="flex-1">
                   {formattedData[currency][groupName].map((bank) => (
                     // 每一家银行的详细信息
-                    <li
-                      key={bank.bankName}
-                      className="flex bank-row"
-                      onMouseMove={(e) => hoverHandler(e)}
-                    >
+                    <div key={bank.bankName} className="flex bank-row">
                       <h3 className="w-40 px-2 flex items-center bank-name">
-                        <a href={bank.url} target="_blank">
+                        <a
+                          target="_blank"
+                          href={bank.url}
+                          className="underline-offset-4 hover:underline"
+                        >
                           {bank.bankName}
                         </a>
                       </h3>
                       <div className="w-40 px-2 flex items-center bank-savings">
-                        {bank.savings || "-"}
+                        <a
+                          target="_blank"
+                          href={bank.savingsUrl}
+                          className="underline-offset-4 hover:underline"
+                        >
+                          {bank.savings || "-"}
+                        </a>
                       </div>
                       {/* 每一家银行的定期利率信息(单个币种可能有多种定存利率信息) */}
                       <div className="flex-1">
                         {bank.deposit.map((deposit, idx) => (
-                          <ul className="flex" key={idx}>
+                          <ol className="flex" key={idx}>
                             {Object.keys(deposit.rates).map((period) => (
                               <li
                                 key={period}
@@ -109,12 +111,18 @@ export default function BankRatesPage() {
                                 {deposit.rates[period] || "-"}
                               </li>
                             ))}
-                          </ul>
+                          </ol>
                         ))}
                       </div>
-                    </li>
+
+                      <div className="w-20 px-2 text-right">
+                        {bank.deposit.map((deposit, idx) => (
+                          <div key={idx}>{deposit.min || "-"}</div>
+                        ))}
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
