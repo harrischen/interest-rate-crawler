@@ -91,7 +91,7 @@ function getLowLevelWithHKD(html: string) {
   });
 
   return {
-    title: "",
+    title: "500 - 10萬以下",
     min: "500",
     rates: FormatInterestOutput(output),
   };
@@ -111,7 +111,7 @@ function getHighLevelWithHKD(html: string) {
   });
 
   return {
-    title: "",
+    title: "10萬+",
     min: "100000",
     rates: FormatInterestOutput(output),
   };

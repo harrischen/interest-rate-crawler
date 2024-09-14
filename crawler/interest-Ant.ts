@@ -124,7 +124,7 @@ function getDetailWithHKD(html: string) {
   });
 
   return {
-    title: "",
+    title: "新資金",
     min: "1",
     rates: FormatInterestOutput(output),
   };
@@ -135,7 +135,7 @@ function getDetailWithCNY(html: string) {
   const output = GetInterestTemplate();
 
   return {
-    title: "新资金",
+    title: "新資金",
     min: "",
     rates: FormatInterestOutput(output),
   };
@@ -155,7 +155,7 @@ function getDetailWithUSD(html: string) {
   });
 
   return {
-    title: "新资金",
+    title: "新資金",
     min: "1",
     rates: FormatInterestOutput(output),
   };

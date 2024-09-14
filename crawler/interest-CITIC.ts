@@ -13,8 +13,8 @@ export async function GetCiticBankInterestRate(browser: puppeteer.Browser) {
   const output: IGetRateData = {
     group: "OtherTraditionalBank",
     bankName: "中信銀行(国际)",
-    savingsUrl: ``,
-    depositUrl: ``,
+    savingsUrl: `https://www.cncbinternational.com/home/tc/index.jsp`,
+    depositUrl: `https://www.cncbinternational.com/home/tc/index.jsp`,
     url: "https://www.cncbinternational.com/home/tc/index.jsp",
     savings: {
       HKD: "",

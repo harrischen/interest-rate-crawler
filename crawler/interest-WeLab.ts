@@ -89,8 +89,10 @@ function getDetailWithHKD(html: string) {
     }
   });
 
+  const title = $(".swipable-table-container .feature-plans .title");
+
   return {
-    title: "",
+    title: title.text() || "GoSave 2.0 定期存款#優惠",
     min: "10",
     rates: FormatInterestOutput(output),
   };

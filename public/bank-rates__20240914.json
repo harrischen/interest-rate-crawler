@@ -1,6 +1,6 @@
 {
-  "start": 1726300163573,
-  "end": 1726300190336,
+  "start": 1726305643088,
+  "end": 1726305672938,
   "list": [
     {
       "bankName": "富融銀行",
@@ -69,7 +69,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "",
+            "title": "500 - 10萬以下",
             "min": "500",
             "rates": {
               "7D": "",
@@ -80,7 +80,7 @@
             }
           },
           {
-            "title": "",
+            "title": "10萬+",
             "min": "100000",
             "rates": {
               "7D": "",
@@ -122,8 +122,8 @@
     {
       "group": "VirtualBank",
       "bankName": "Mox",
-      "savingsUrl": "",
-      "depositUrl": "",
+      "savingsUrl": "https://www.cncbinternational.com/home/tc/index.jsp",
+      "depositUrl": "https://www.cncbinternational.com/home/tc/index.jsp",
       "url": "https://www.cncbinternational.com/home/tc/index.jsp",
       "savings": {
         "HKD": "",
@@ -239,7 +239,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "",
+            "title": "GoSave 2.0 定期存款#優惠：",
             "min": "10",
             "rates": {
               "7D": "",
@@ -398,7 +398,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "",
+            "title": "新資金",
             "min": "1",
             "rates": {
               "7D": "",
@@ -411,7 +411,7 @@
         ],
         "CNY": [
           {
-            "title": "新资金",
+            "title": "新資金",
             "min": "",
             "rates": {
               "7D": "",
@@ -424,7 +424,7 @@
         ],
         "USD": [
           {
-            "title": "新资金",
+            "title": "新資金",
             "min": "1",
             "rates": {
               "7D": "",
@@ -696,7 +696,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "",
+            "title": "一般星展客戶",
             "min": "50000",
             "rates": {
               "7D": "",
@@ -709,7 +709,7 @@
         ],
         "CNY": [
           {
-            "title": "",
+            "title": "一般星展客戶",
             "min": "40000",
             "rates": {
               "7D": "",
@@ -722,7 +722,7 @@
         ],
         "USD": [
           {
-            "title": "",
+            "title": "一般星展客戶",
             "min": "6000",
             "rates": {
               "7D": "",
@@ -844,8 +844,8 @@
     {
       "group": "OtherTraditionalBank",
       "bankName": "中信銀行(国际)",
-      "savingsUrl": "",
-      "depositUrl": "",
+      "savingsUrl": "https://www.cncbinternational.com/home/tc/index.jsp",
+      "depositUrl": "https://www.cncbinternational.com/home/tc/index.jsp",
       "url": "https://www.cncbinternational.com/home/tc/index.jsp",
       "savings": {
         "HKD": "",
@@ -1014,7 +1014,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "",
+            "title": "雲利率",
             "min": "5000",
             "rates": {
               "7D": "0.1000",
@@ -1027,7 +1027,7 @@
         ],
         "CNY": [
           {
-            "title": "",
+            "title": "雲利率",
             "min": "5000",
             "rates": {
               "7D": "0.3500",
@@ -1040,7 +1040,7 @@
         ],
         "USD": [
           {
-            "title": "",
+            "title": "雲利率",
             "min": "1000",
             "rates": {
               "7D": "0.6000",

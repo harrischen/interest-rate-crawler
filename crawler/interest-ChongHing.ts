@@ -100,7 +100,7 @@ function getDetailWithHKD(html: string) {
   output["12M"] = FormatRate(tr.find("td").eq(10).text());
 
   return {
-    title: "",
+    title: "雲利率",
     min: "5000",
     rates: FormatInterestOutput(output),
   };
@@ -122,7 +122,7 @@ function getDetailWithUSD(html: string) {
   output["12M"] = FormatRate(tr.find("td").eq(10).text());
 
   return {
-    title: "",
+    title: "雲利率",
     min: "1000",
     rates: FormatInterestOutput(output),
   };
@@ -144,7 +144,7 @@ function getDetailWithCNY(html: string) {
   output["12M"] = FormatRate(tr.find("td").eq(10).text());
 
   return {
-    title: "",
+    title: "雲利率",
     min: "5000",
     rates: FormatInterestOutput(output),
   };

@@ -93,7 +93,7 @@ export default function BankRatesPage() {
                       />
 
                       <div className="flex-1">
-                        <BankDepositComponent deposit={bank.deposit} />
+                        <BankDepositComponent deposit={bank.deposit} depositUrl={bank.depositUrl} />
                       </div>
 
                       <div className="w-20 px-2 text-right">

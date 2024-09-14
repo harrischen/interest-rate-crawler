@@ -103,7 +103,7 @@ function getDetailWithHKD(html: string) {
   });
 
   return {
-    title: "",
+    title: "一般星展客戶",
     min: "50000",
     rates: FormatInterestOutput(output),
   };
@@ -128,7 +128,7 @@ function getDetailWithUSD(html: string) {
   });
 
   return {
-    title: "",
+    title: "一般星展客戶",
     min: "6000",
     rates: FormatInterestOutput(output),
   };
@@ -153,7 +153,7 @@ function getDetailWithCNY(html: string) {
   });
 
   return {
-    title: "",
+    title: "一般星展客戶",
     min: "40000",
     rates: FormatInterestOutput(output),
   };
