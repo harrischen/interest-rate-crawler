@@ -41,7 +41,6 @@ export async function GetBocHkBankInterestRate(browser: puppeteer.Browser) {
       timeout: 0,
     });
     await WaitForElement(savingsPage, "#depositRates_form_currency_field");
-    await savingsPage.waitForSelector("#depositRates_form_currency_field");
     await savingsPage.select("#depositRates_form_currency_field", "HKD");
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const hkdSavingsContent = await savingsPage.content();

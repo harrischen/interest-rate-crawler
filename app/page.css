@@ -1,0 +1,23 @@
+:root {
+  --default-hover-bg: rgb(226 232 240);
+  --target-hover-bg: rgb(203 213 225);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --default-hover-bg: rgb(63 63 70);
+    --target-hover-bg: rgb(39 39 42);
+  }
+}
+
+.bank-row:hover {
+  background: var(--default-hover-bg);
+}
+
+.bank-group:hover .group-title {
+  background: var(--default-hover-bg);
+}
+
+.page-body li[class*="deposit"]:hover {
+  background: var(--target-hover-bg);
+}

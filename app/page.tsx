@@ -1,5 +1,6 @@
 "use client"; // This is a client component 👈🏽
 
+import "./page.css";
 import React, { useMemo } from "react";
 import useFetchRates from "@/hooks/useFetchRates";
 import { formatGroupName, formatRateHandler } from "@/business/rate-format";
@@ -10,7 +11,11 @@ export default function BankRatesPage() {
   const formattedData = useMemo(() => {
     return data && data.list ? formatRateHandler(data.list) : null;
   }, [data]);
-  console.log(formattedData);
+
+  const hoverHandler = (e: React.MouseEvent) => {
+    const isBankName = e.currentTarget.className.indexOf("bank-name") !== -1;
+    console.log(e);
+  };
 
   if (loading) {
     return (
@@ -40,14 +45,14 @@ export default function BankRatesPage() {
   return (
     <>
       <div className="w-full sticky top-0 left-0 right-0 bg-slate-400">
-        <div className="max-w-7xl m-auto flex py-4">
-          <div className="w-40">銀行分類</div>
+        <div className="max-w-7xl m-auto flex py-4 cursor-pointer page-header">
+          <div className="w-40 px-2 group-title">銀行分類</div>
           <div className="flex-1 flex">
-            <div className="w-40 px-2">銀行名稱</div>
-            <div className="w-40 px-2">活期利率</div>
+            <div className="w-40 px-2 bank-name">銀行名稱</div>
+            <div className="w-40 px-2 bank-savings">活期利率</div>
             {Object.keys(formattedData.HKD.virtualBank[0].deposit[0].rates).map(
               (i) => (
-                <div key={i} className="px-2 flex-1">
+                <div key={i} className={`px-2 flex-1 bank-${i}`}>
                   {i}
                 </div>
               )
@@ -56,7 +61,7 @@ export default function BankRatesPage() {
         </div>
       </div>
 
-      <div className="w-full max-w-7xl m-auto text-sm leading-loose	">
+      <div className="w-full max-w-7xl m-auto text-sm leading-loose	page-body">
         {Object.keys(formattedData).map((currency) => (
           // 按货币进行分类归组
           <div className="py-4" key={currency}>
@@ -69,10 +74,10 @@ export default function BankRatesPage() {
               // 按银行类型进行分数归组，比如传统银行、虚拟银行
               <div
                 key={groupName}
-                className="flex py-2 border-b last:border-b-0"
+                className="flex py-2 bank-group border-b last:border-b-0"
               >
                 {/* 银行类型 */}
-                <div className="w-40 flex items-center">
+                <div className="w-40 px-2 flex items-center group-title">
                   {formatGroupName(groupName)}
                 </div>
 
@@ -81,12 +86,15 @@ export default function BankRatesPage() {
                     // 每一家银行的详细信息
                     <li
                       key={bank.bankName}
-                      className="flex hover:bg-slate-200 dark:hover:bg-zinc-700"
+                      className="flex bank-row"
+                      onMouseMove={(e) => hoverHandler(e)}
                     >
-                      <h3 className="w-40 px-2 flex items-center">
-                        {bank.bankName}
+                      <h3 className="w-40 px-2 flex items-center bank-name">
+                        <a href={bank.url} target="_blank">
+                          {bank.bankName}
+                        </a>
                       </h3>
-                      <div className="w-40 px-2 flex items-center">
+                      <div className="w-40 px-2 flex items-center bank-savings">
                         {bank.savings || "-"}
                       </div>
                       {/* 每一家银行的定期利率信息(单个币种可能有多种定存利率信息) */}
@@ -96,7 +104,7 @@ export default function BankRatesPage() {
                             {Object.keys(deposit.rates).map((period) => (
                               <li
                                 key={period}
-                                className="flex-1 px-2 hover:bg-slate-300 dark:hover:bg-zinc-800"
+                                className={`flex-1 px-2 deposit-${period}`}
                               >
                                 {deposit.rates[period] || "-"}
                               </li>

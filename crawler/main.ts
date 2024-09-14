@@ -77,14 +77,17 @@ export async function main() {
   const time = dayjs().format("YYYYMMDD");
   const resp = await Promise.all(promises);
   const end = new Date().getTime();
-  SaveToJsonFile(
-    {
-      start,
-      end,
-      list: resp,
-    },
-    path.join(__dirname, `../public/`, `bank-rates__${time}.json`)
-  );
+
+  const targetContent = {
+    start,
+    end,
+    list: resp,
+  };
+  const targetDir = path.join(__dirname, `../public/`);
+  const defaultFile = path.join(targetDir, `bank-rates.json`);
+  const dailyFile = path.join(targetDir, `bank-rates__${time}.json`);
+  SaveToJsonFile(targetContent, dailyFile);
+  SaveToJsonFile(targetContent, defaultFile);
 
   console.log("----------virtualBankBrowser----------");
   console.log(virtualBankBrowser.debugInfo);
