@@ -18,6 +18,6 @@
   background: var(--default-hover-bg);
 }
 
-.page-body li[class*="deposit"]:hover {
+.page-body li:hover {
   background: var(--target-hover-bg);
 }

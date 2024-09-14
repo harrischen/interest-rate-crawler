@@ -98,7 +98,7 @@ function getDetailWithHKD(html: string) {
   output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text().split("/")?.[0]);
 
   return {
-    title: "顯卓私人理財或顯卓理財 - 新資金",
+    title: "顯卓私人理財或顯卓理財",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
@@ -118,7 +118,7 @@ function getDetailWithUSD(html: string) {
   output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text().split("/")?.[0]);
 
   return {
-    title: "顯卓私人理財或顯卓理財 - 新資金",
+    title: "顯卓私人理財或顯卓理財",
     min: "1000",
     rates: FormatInterestOutput(output),
   };

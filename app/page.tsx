@@ -2,8 +2,14 @@
 
 import "./page.css";
 import React, { useMemo } from "react";
+
 import useFetchRates from "@/hooks/useFetchRates";
 import { formatGroupName, formatRateHandler } from "@/business/rate-format";
+import BankNameComponent from "@/components/bankName";
+import BankSavingsComponent from "@/components/bankSavings";
+import BankDepositComponent from "@/components/bankDeposit";
+import BankMinDepositAmtComponent from "@/components/bankMinAmt";
+import MenuRatesComponent from "@/components/menuRates";
 
 export default function BankRatesPage() {
   const { data, loading, error } = useFetchRates();
@@ -38,28 +44,23 @@ export default function BankRatesPage() {
   }
 
   return (
-    <>
+    <div className="page-layout">
       <div className="w-full sticky top-0 left-0 right-0 bg-slate-400">
-        <div className="max-w-7xl m-auto flex py-4 cursor-pointer page-header">
+        <div className="max-w-7xl m-auto flex py-4 cursor-pointer">
           <div className="w-40 px-2 group-title">Classification</div>
           <div className="flex-1 flex">
-            <div className="w-40 px-2 bank-name">Bank Name</div>
-            <div className="w-40 px-2 bank-savings">Savings</div>
-            {Object.keys(formattedData.HKD.virtualBank[0].deposit[0].rates).map(
-              (i) => (
-                <div key={i} className={`px-2 flex-1 bank-${i}`}>
-                  {i}
-                </div>
-              )
-            )}
+            <div className="w-40 px-2">Bank Name</div>
+            <div className="w-32 px-2">Savings</div>
+            <MenuRatesComponent
+              rates={formattedData.HKD.virtualBank[0].deposit[0].rates}
+            />
           </div>
           <div className="w-20 px-2 text-right">Min Amt</div>
         </div>
       </div>
 
-      <div className="w-full max-w-7xl m-auto text-sm leading-loose	page-body">
+      <div className="w-full max-w-7xl m-auto text-sm leading-loose page-body">
         {Object.keys(formattedData).map((currency) => (
-          // 按货币进行分类归组
           <div className="py-4" key={currency}>
             {/* 货币信息 */}
             <div className="text-4xl font-bold pb-4 text-center">
@@ -81,44 +82,22 @@ export default function BankRatesPage() {
                   {formattedData[currency][groupName].map((bank) => (
                     // 每一家银行的详细信息
                     <div key={bank.bankName} className="flex bank-row">
-                      <h3 className="w-40 px-2 flex items-center bank-name">
-                        <a
-                          target="_blank"
-                          href={bank.url}
-                          className="underline-offset-4 hover:underline"
-                        >
-                          {bank.bankName}
-                        </a>
-                      </h3>
-                      <div className="w-40 px-2 flex items-center bank-savings">
-                        <a
-                          target="_blank"
-                          href={bank.savingsUrl}
-                          className="underline-offset-4 hover:underline"
-                        >
-                          {bank.savings || "-"}
-                        </a>
-                      </div>
-                      {/* 每一家银行的定期利率信息(单个币种可能有多种定存利率信息) */}
+                      <BankNameComponent
+                        url={bank.url}
+                        bankName={bank.bankName}
+                      />
+
+                      <BankSavingsComponent
+                        savings={bank.savings}
+                        savingsUrl={bank.savingsUrl}
+                      />
+
                       <div className="flex-1">
-                        {bank.deposit.map((deposit, idx) => (
-                          <ol className="flex" key={idx}>
-                            {Object.keys(deposit.rates).map((period) => (
-                              <li
-                                key={period}
-                                className={`flex-1 px-2 deposit-${period}`}
-                              >
-                                {deposit.rates[period] || "-"}
-                              </li>
-                            ))}
-                          </ol>
-                        ))}
+                        <BankDepositComponent deposit={bank.deposit} />
                       </div>
 
                       <div className="w-20 px-2 text-right">
-                        {bank.deposit.map((deposit, idx) => (
-                          <div key={idx}>{deposit.min || "-"}</div>
-                        ))}
+                        <BankMinDepositAmtComponent deposit={bank.deposit} />
                       </div>
                     </div>
                   ))}
@@ -128,6 +107,6 @@ export default function BankRatesPage() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }

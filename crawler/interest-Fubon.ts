@@ -104,7 +104,7 @@ function getDetailWithHKD(html: string) {
   });
 
   return {
-    title: "Fubon+ 手機應用程式限定 ─ 特優港元定期存款優惠",
+    title: "Fubon+ 手機應用程式限定",
     min: "500000",
     rates: FormatInterestOutput(output),
   };
@@ -128,7 +128,7 @@ function getDetailWithUSD(html: string) {
   });
 
   return {
-    title: "Fubon+ 手機應用程式限定 ─特優美元定期存款優惠",
+    title: "Fubon+ 手機應用程式限定",
     min: "65000",
     rates: FormatInterestOutput(output),
   };
@@ -152,7 +152,7 @@ function getDetailWithCNY(html: string) {
   });
 
   return {
-    title: "Fubon+ 手機應用程式限定 ─ 外幣新資金定期存款優惠",
+    title: "Fubon+ 手機應用程式限定",
     min: "200000",
     rates: FormatInterestOutput(output),
   };

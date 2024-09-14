@@ -104,7 +104,7 @@ function getPremierWithHKD(html: string) {
     }
   });
   return {
-    title: "滙豐卓越理財尊尚客戶",
+    title: "卓越理財尊尚客戶",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
@@ -154,7 +154,7 @@ function getPremierWithUSD(html: string) {
     }
   });
   return {
-    title: "滙豐卓越理財尊尚客戶",
+    title: "卓越理財尊尚客戶",
     min: "2000",
     rates: FormatInterestOutput(output),
   };
@@ -202,7 +202,7 @@ function getPremierWithCNY(html: string) {
     }
   });
   return {
-    title: "滙豐卓越理財尊尚客戶",
+    title: "卓越理財尊尚客戶",
     min: "10000",
     rates: FormatInterestOutput(output),
   };

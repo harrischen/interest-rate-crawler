@@ -101,7 +101,7 @@ function getDetailWithHKD(html: string) {
   });
 
   return {
-    title: "港元定期存款特優年利率 (%)",
+    title: "特優年利率 (%)",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
@@ -125,7 +125,7 @@ function getDetailWithUSD(html: string) {
   });
 
   return {
-    title: "美元定期存款特優年利率 (%)",
+    title: "特優年利率 (%)",
     min: "2000",
     rates: FormatInterestOutput(output),
   };
@@ -149,7 +149,7 @@ function getDetailWithCNY(html: string) {
   });
 
   return {
-    title: "人民幣定期存款特優年利率 (%)",
+    title: "特優年利率 (%)",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
