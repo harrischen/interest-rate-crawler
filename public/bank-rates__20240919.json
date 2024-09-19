@@ -584,7 +584,7 @@
       "depositUrl": "https://www.bochk.com/tc/deposits/promotion/timedeposits.html",
       "savings": {
         "HKD": "0.87500",
-        "USD": "1.00000",
+        "USD": "",
         "CNY": "0.10000"
       },
       "deposit": {
