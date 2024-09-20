@@ -1,6 +1,6 @@
 {
-  "start": 1726813089993,
-  "end": 1726813117002,
+  "start": 1726828001670,
+  "end": 1726829191465,
   "list": [
     {
       "bankName": "富融銀行",
@@ -388,8 +388,8 @@
       "group": "VirtualBank",
       "bankName": "蚂蚁銀行",
       "url": "https://www.antbank.hk/home?lang=zh_hk",
-      "savingsUrl": "https://www.antbank.hk/personal-banking-services?lang=zh_hk",
-      "depositUrl": "https://www.antbank.hk/time-deposit?lang=zh_hk",
+      "savingsUrl": "https://www.antbank.hk/rates?lang=zh_hk",
+      "depositUrl": "https://www.antbank.hk/rates?lang=zh_hk",
       "savings": {
         "HKD": "0.001",
         "CNY": "0.1",
@@ -398,7 +398,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "新資金",
+            "title": "定期存款 + 新資金額外加息",
             "min": "1",
             "rates": {
               "7D": "",
@@ -411,7 +411,7 @@
         ],
         "CNY": [
           {
-            "title": "新資金",
+            "title": "定期存款 + 新資金額外加息",
             "min": "",
             "rates": {
               "7D": "",
@@ -424,14 +424,14 @@
         ],
         "USD": [
           {
-            "title": "新資金",
+            "title": "定期存款 + 新資金額外加息",
             "min": "1",
             "rates": {
               "7D": "",
               "1M": "",
-              "3M": "3.70",
-              "6M": "3.80",
-              "12M": "4.00"
+              "3M": "3.60",
+              "6M": "3.70",
+              "12M": "3.90"
             }
           }
         ]
@@ -749,7 +749,7 @@
       "deposit": {
         "HKD": [
           {
-            "title": "顯卓私人理財或顯卓理財",
+            "title": "至尊理財",
             "min": "10000",
             "rates": {
               "7D": "",
@@ -775,7 +775,7 @@
         ],
         "USD": [
           {
-            "title": "顯卓私人理財或顯卓理財",
+            "title": "至尊理財",
             "min": "1000",
             "rates": {
               "7D": "",

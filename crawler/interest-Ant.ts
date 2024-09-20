@@ -7,7 +7,9 @@ import {
   ExtractPercentage,
   GetInterestTemplate,
   FormatInterestOutput,
+  FetchWebsiteContent,
 } from "./common";
+import Decimal from "decimal.js-light";
 
 /**
  * 获取利率信息
@@ -20,8 +22,8 @@ export async function GetAntBankInterestRate(browser: puppeteer.Browser) {
     group: "VirtualBank",
     bankName: "蚂蚁銀行",
     url: "https://www.antbank.hk/home?lang=zh_hk",
-    savingsUrl: "https://www.antbank.hk/personal-banking-services?lang=zh_hk",
-    depositUrl: "https://www.antbank.hk/time-deposit?lang=zh_hk",
+    savingsUrl: "https://www.antbank.hk/rates?lang=zh_hk",
+    depositUrl: "https://www.antbank.hk/rates?lang=zh_hk",
     savings: {
       HKD: "",
       USD: "",
@@ -35,40 +37,19 @@ export async function GetAntBankInterestRate(browser: puppeteer.Browser) {
   };
   try {
     // 获取活期存款的利率信息
-    const savingsPage = await browser.newPage();
-    await savingsPage.goto(output.savingsUrl, {
-      waitUntil: "networkidle2",
-      timeout: 0,
-    });
-
-    await savingsPage.waitForSelector(".subTitle___jvNLW");
-    await savingsPage.click(".subTitle___jvNLW a:last-child");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const savingsContent = await savingsPage.content();
+    const savingsContent = await FetchWebsiteContent(
+      browser,
+      output.savingsUrl
+    );
     output.savings = getSavingsDetail(savingsContent);
-    await savingsPage.close();
 
     // 获取定期存款的利率信息
-    const depositPage = await browser.newPage();
-    await depositPage.goto(output.depositUrl, {
-      waitUntil: "networkidle2",
-      timeout: 0,
-    });
+    const depositContent = await FetchWebsiteContent(
+      browser,
+      output.depositUrl
+    );
+    output.deposit = getDepositDetail(depositContent);
 
-    // 蚂蚁的页面，默认就是USD
-    // CNY的话，因为原始页面没有，我们就暂时不做任何处理逻辑
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const usdDepositContent = await depositPage.content();
-    output.deposit = getDepositDetail(usdDepositContent);
-
-    // 点击切换到HKD，但它的接口是异步的
-    // 需要等待一会（这里预计1秒即可）
-    await depositPage.click(".currencyItem___DvYPe:last-child");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const hkdDepositContent = await depositPage.content();
-    output.deposit.HKD = getDepositDetail(hkdDepositContent).HKD;
-
-    await depositPage.close();
     return output;
   } catch (error) {
     console.log("----------------GetAntBankInterestRate----------------");
@@ -85,10 +66,12 @@ export async function GetAntBankInterestRate(browser: puppeteer.Browser) {
  */
 function getSavingsDetail(html: string) {
   const $ = cheerio.load(html);
-  const tr = $("div[class*=ckbItem1]");
-  const hkd = tr.eq(0).find("div").eq(2).text();
-  const usd = tr.eq(1).find("div").eq(2).text();
-  const cny = tr.eq(2).find("div").eq(2).text();
+  const target = $('p:contains("活期儲蓄帳戶")').first();
+  const table = target.siblings("table").first();
+  const tbody = table.find("tbody").first();
+  const hkd = tbody.find("tr").eq(0).find("td").eq(1).text();
+  const usd = tbody.find("tr").eq(1).find("td").eq(1).text();
+  const cny = tbody.find("tr").eq(2).find("td").eq(1).text();
 
   return {
     HKD: ExtractPercentage(hkd),
@@ -114,17 +97,25 @@ function getDetailWithHKD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
 
-  const targetDom = $('[class^="rateSelectList"]');
-  targetDom.children('[class^="rateSelectItem"]').each((_, row) => {
-    const period = FormatPeriod($(row).find('[class^="rateItemTitle"]').text());
-    const rate = $(row).find('[class^="rateItemNum"]').text();
-    if (rate && period && output[period] === "") {
+  const target = $('div:contains("港幣定期存款年利率及新資金")');
+  const table = target.parents().first();
+  const tr = table
+    .find("[class^=rateTableList]")
+    .not("[class*=rateTableFirstList]");
+
+  tr.each((_, row) => {
+    const period = FormatPeriod($(row).find("div").eq(0).text());
+    const normalRate = $(row).find("div").eq(1).text();
+    const newRate = $(row).find("div").eq(2).text();
+    if (normalRate && newRate && period && output[period] === "") {
+      const decimalRate = new Decimal(FormatRate(normalRate));
+      const rate = decimalRate.add(FormatRate(newRate)).toFixed(2);
       output[period] = FormatRate(rate);
     }
   });
 
   return {
-    title: "新資金",
+    title: "定期存款 + 新資金額外加息",
     min: "1",
     rates: FormatInterestOutput(output),
   };
@@ -135,7 +126,7 @@ function getDetailWithCNY(html: string) {
   const output = GetInterestTemplate();
 
   return {
-    title: "新資金",
+    title: "定期存款 + 新資金額外加息",
     min: "",
     rates: FormatInterestOutput(output),
   };
@@ -145,17 +136,25 @@ function getDetailWithUSD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
 
-  const targetDom = $('[class^="rateSelectList"]');
-  targetDom.children('[class^="rateSelectItem"]').each((_, row) => {
-    const period = FormatPeriod($(row).find('[class^="rateItemTitle"]').text());
-    const rate = $(row).find('[class^="rateItemNum"]').text();
-    if (rate && period && output[period] === "") {
+  const target = $('div:contains("美元定期存款年利率及新資金")');
+  const table = target.parents().first();
+  const tr = table
+    .find("[class^=rateTableList]")
+    .not("[class*=rateTableFirstList]");
+
+  tr.each((_, row) => {
+    const period = FormatPeriod($(row).find("div").eq(0).text());
+    const normalRate = $(row).find("div").eq(1).text();
+    const newRate = $(row).find("div").eq(2).text();
+    if (normalRate && newRate && period && output[period] === "") {
+      const decimalRate = new Decimal(FormatRate(normalRate));
+      const rate = decimalRate.add(FormatRate(newRate)).toFixed(2);
       output[period] = FormatRate(rate);
     }
   });
 
   return {
-    title: "新資金",
+    title: "定期存款 + 新資金額外加息",
     min: "1",
     rates: FormatInterestOutput(output),
   };
