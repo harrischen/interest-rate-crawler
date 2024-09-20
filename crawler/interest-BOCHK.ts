@@ -99,11 +99,12 @@ function getDepositDetail(html: string) {
 function getDetailWithHKD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
-  const tr = $("#ui-id-2 tbody tr").eq(1);
+  const table = $('#ui-id-2').find('table').eq(0);
+  const tr = table.find('tbody tr').eq(2);
   const td = $(tr).find("td");
-  output["3M"] = FormatRate($(td).eq(2).text());
-  output["6M"] = FormatRate($(td).eq(3).text());
-  output["12M"] = FormatRate($(td).eq(4).text());
+  output["3M"] = FormatRate($(td).eq(1).text());
+  output["6M"] = FormatRate($(td).eq(2).text());
+  output["12M"] = FormatRate($(td).eq(3).text());
 
   return {
     title: "",
@@ -115,11 +116,12 @@ function getDetailWithHKD(html: string) {
 function getDetailWithUSD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
-  const tr = $("#ui-id-2 tbody tr").eq(3);
+  const table = $('#ui-id-2').find('table').eq(0);
+  const tr = table.find('tbody tr').eq(4);
   const td = $(tr).find("td");
-  output["3M"] = FormatRate($(td).eq(2).text());
-  output["6M"] = FormatRate($(td).eq(3).text());
-  output["12M"] = FormatRate($(td).eq(4).text());
+  output["3M"] = FormatRate($(td).eq(1).text());
+  output["6M"] = FormatRate($(td).eq(2).text());
+  output["12M"] = FormatRate($(td).eq(3).text());
 
   return {
     title: "",
@@ -131,11 +133,12 @@ function getDetailWithUSD(html: string) {
 function getDetailWithCNY(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
-  const tr = $("#ui-id-2 tbody tr").eq(5);
+  const table = $('#ui-id-2').find('table').eq(0);
+  const tr = table.find('tbody tr').eq(6);
   const td = $(tr).find("td");
-  output["3M"] = FormatRate($(td).eq(2).text());
-  output["6M"] = FormatRate($(td).eq(3).text());
-  output["12M"] = FormatRate($(td).eq(4).text());
+  output["3M"] = FormatRate($(td).eq(1).text());
+  output["6M"] = FormatRate($(td).eq(2).text());
+  output["12M"] = FormatRate($(td).eq(3).text());
 
   return {
     title: "",
