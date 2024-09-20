@@ -49,7 +49,7 @@ export default function BankRatesPage() {
         <div className="max-w-7xl m-auto flex py-4 cursor-pointer">
           <div className="w-40 px-2 group-title">Classification</div>
           <div className="flex-1 flex">
-            <div className="w-40 px-2">Bank Name</div>
+            <div className="w-44 px-2">Bank Name</div>
             <div className="w-32 px-2">Savings</div>
             <MenuRatesComponent
               rates={formattedData.HKD.virtualBank[0].deposit[0].rates}
