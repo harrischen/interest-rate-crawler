@@ -93,12 +93,12 @@ function getDetailWithHKD(html: string) {
   const tr = table.find("tr");
 
   // 简单粗暴的指定定期数据
-  output["3M"] = FormatRate(tr.eq(3).find("td").eq(1).text().split("/")?.[0]);
-  output["6M"] = FormatRate(tr.eq(4).find("td").eq(1).text().split("/")?.[0]);
-  output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text().split("/")?.[0]);
+  output["3M"] = FormatRate(tr.eq(3).find("td").eq(2).text().split("/")?.[0]);
+  output["6M"] = FormatRate(tr.eq(4).find("td").eq(2).text().split("/")?.[0]);
+  output["12M"] = FormatRate(tr.eq(5).find("td").eq(2).text().split("/")?.[0]);
 
   return {
-    title: "顯卓私人理財或顯卓理財",
+    title: "至尊理財",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
@@ -113,12 +113,12 @@ function getDetailWithUSD(html: string) {
   const tr = table.find("tr");
 
   // 简单粗暴的指定定期数据
-  output["3M"] = FormatRate(tr.eq(3).find("td").eq(1).text().split("/")?.[0]);
-  output["6M"] = FormatRate(tr.eq(4).find("td").eq(1).text().split("/")?.[0]);
-  output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text().split("/")?.[0]);
+  output["3M"] = FormatRate(tr.eq(3).find("td").eq(2).text().split("/")?.[0]);
+  output["6M"] = FormatRate(tr.eq(4).find("td").eq(2).text().split("/")?.[0]);
+  output["12M"] = FormatRate(tr.eq(5).find("td").eq(2).text().split("/")?.[0]);
 
   return {
-    title: "顯卓私人理財或顯卓理財",
+    title: "至尊理財",
     min: "1000",
     rates: FormatInterestOutput(output),
   };
