@@ -83,8 +83,8 @@ function getLowLevelWithHKD(html: string) {
 
   const tr = $(".time-deposit-rate-table-container-desktop tbody tr");
   tr.each((_, row) => {
-    const period = FormatPeriod($(row).find("td").eq(0).text().trim());
-    const rate = FormatRate($(row).find("td").eq(1).text().trim());
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(1).text());
     if (rate && period && output[period] === "") {
       output[period] = rate;
     }
@@ -103,8 +103,8 @@ function getHighLevelWithHKD(html: string) {
 
   const tr = $(".time-deposit-rate-table-container-desktop tbody tr");
   tr.each((_, row) => {
-    const period = FormatPeriod($(row).find("td").eq(0).text().trim());
-    const rate = FormatRate($(row).find("td").eq(2).text().trim());
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(2).text());
     if (rate && period && output[period] === "") {
       output[period] = rate;
     }

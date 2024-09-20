@@ -115,7 +115,7 @@ export function SaveToJsonFile(data: any, filename: string): void {
  * @returns
  */
 export function FormatPeriod(period: string): string {
-  const replaceVal = PeriodMap(period.replace(/ /g, ""));
+  const replaceVal = PeriodMap(period.trim().replace(/ /g, ""));
   const daysMatch = replaceVal.match(/(\d+)天/);
   const weeksMatch = replaceVal.match(/(\d+)週/);
   const monthsMatch = replaceVal.match(/(\d+)個月/);
