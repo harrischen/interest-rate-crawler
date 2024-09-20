@@ -97,11 +97,11 @@ function getDetailWithUSD(html: string) {
   const output = GetInterestTemplate();
 
   const tr = $("#saving tbody tr");
-  output["7D"] = FormatRate(tr.eq(9).find("td").eq(2).text());
-  output["1M"] = FormatRate(tr.eq(10).find("td").eq(1).text());
-  output["3M"] = FormatRate(tr.eq(12).find("td").eq(1).text());
-  output["6M"] = FormatRate(tr.eq(13).find("td").eq(1).text());
-  output["12M"] = FormatRate(tr.eq(15).find("td").eq(1).text());
+  output["7D"] = FormatRate(tr.eq(16).find("td").eq(2).text());
+  output["1M"] = FormatRate(tr.eq(17).find("td").eq(1).text());
+  output["3M"] = FormatRate(tr.eq(19).find("td").eq(1).text());
+  output["6M"] = FormatRate(tr.eq(20).find("td").eq(1).text());
+  output["12M"] = FormatRate(tr.eq(22).find("td").eq(1).text());
 
   return {
     title: "",
@@ -115,11 +115,11 @@ function getDetailWithCNY(html: string) {
   const output = GetInterestTemplate();
 
   const tr = $("#saving tbody tr");
-  output["7D"] = FormatRate(tr.eq(16).find("td").eq(2).text());
-  output["1M"] = FormatRate(tr.eq(17).find("td").eq(1).text());
-  output["3M"] = FormatRate(tr.eq(19).find("td").eq(1).text());
-  output["6M"] = FormatRate(tr.eq(20).find("td").eq(1).text());
-  output["12M"] = FormatRate(tr.eq(22).find("td").eq(1).text());
+  output["7D"] = FormatRate(tr.eq(9).find("td").eq(2).text());
+  output["1M"] = FormatRate(tr.eq(10).find("td").eq(1).text());
+  output["3M"] = FormatRate(tr.eq(12).find("td").eq(1).text());
+  output["6M"] = FormatRate(tr.eq(13).find("td").eq(1).text());
+  output["12M"] = FormatRate(tr.eq(15).find("td").eq(1).text());
 
   return {
     title: "",
