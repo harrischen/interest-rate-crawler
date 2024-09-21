@@ -1,7 +1,7 @@
 import path from "path";
 import dayjs from "dayjs";
 import * as puppeteer from "puppeteer";
-import { SaveToJsonFile } from "./common";
+import { GetRateFileContent, SaveToJsonFile } from "./common";
 import { GetAirStarBankInterestRate } from "./interest-Airstar";
 import { GetHaseBankInterestRate } from "./interest-HASE";
 import { GetHsbcBankInterestRate } from "./interest-HSBC";
@@ -88,12 +88,18 @@ export async function main() {
   }
   targetContent.end = new Date().getTime().toString();
   const targetDir = path.join(__dirname, `../public/`);
-  // 保存两份文件，主要是为了防止某一天没有数据，但页面又需要正常展示
-  // 1. 固定名字的文件
-  // 2. 按时间命名的文件
-  const defaultFile = path.join(targetDir, `bank-rates.json`);
-  const dailyFile = path.join(targetDir, `bank-rates__${time}.json`);
-  SaveToJsonFile(targetContent, dailyFile);
-  SaveToJsonFile(targetContent, defaultFile);
+  const bankRatesPath = path.join(targetDir, `bank-rates.json`);
+  // 先将存量的早文件内容拷贝出来
+  const oldContent = GetRateFileContent(bankRatesPath);
+  const oldFilePath = path.join(targetDir, `bank-rates__old.json`);
+  // 按日期存储
+  const dailyFilePath = path.join(targetDir, `bank-rates__${time}.json`);
+  // 保存三份文件，主要是为了防止某一天没有数据，但页面又需要正常展示
+  // 1. 将原来的bank-rates.json另存为bank-rates__old.json
+  // 2. 固定名字的文件
+  // 3. 按时间命名的文件
+  SaveToJsonFile(oldContent, oldFilePath);
+  SaveToJsonFile(targetContent, bankRatesPath);
+  SaveToJsonFile(targetContent, dailyFilePath);
 }
 main();

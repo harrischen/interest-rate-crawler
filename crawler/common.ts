@@ -109,6 +109,15 @@ export function SaveToJsonFile(data: any, filename: string): void {
   fs.writeFileSync(filename, JSON.stringify(data, null, 2), "utf-8");
 }
 
+export function GetRateFileContent(filename: string) {
+  if (!fs.existsSync(filename)) {
+    return;
+  }
+  const data = fs.readFileSync(filename, "utf8");
+  const jsonData = JSON.parse(data);
+  return jsonData;
+}
+
 /**
  * 格式化存期信息
  * @param period
