@@ -8,7 +8,7 @@ interface IBankNameProps {
 class BankNameComponent extends React.Component<IBankNameProps> {
   render() {
     return (
-      <h3 className="w-40 px-2 flex items-center">
+      <h3 className="w-36 px-2 flex items-center">
         <a
           target="_blank"
           href={this.props.url}

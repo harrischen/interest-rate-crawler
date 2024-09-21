@@ -2,21 +2,24 @@
 
 import "./page.css";
 import React, { useMemo } from "react";
-
-import useFetchRates from "@/hooks/useFetchRates";
-import { formatGroupName, formatRateHandler } from "@/business/rate-format";
 import BankNameComponent from "@/components/bankName";
+import MenuRatesComponent from "@/components/menuRates";
 import BankSavingsComponent from "@/components/bankSavings";
 import BankDepositComponent from "@/components/bankDeposit";
+import { useFetchCurrentRates } from "@/hooks/useFetchRates";
 import BankMinDepositAmtComponent from "@/components/bankMinAmt";
-import MenuRatesComponent from "@/components/menuRates";
+import { formatGroupName, formatRateHandler } from "@/business/rate-format";
 
 export default function BankRatesPage() {
-  const { data, loading, error } = useFetchRates();
+  const { currentRates, oldRates, loading, error } = useFetchCurrentRates();
 
-  const formattedData = useMemo(() => {
-    return data && data.list ? formatRateHandler(data.list) : null;
-  }, [data]);
+  const todayData = useMemo(() => {
+    return currentRates.list ? formatRateHandler(currentRates.list) : null;
+  }, [currentRates]);
+
+  const oldData = useMemo(() => {
+    return oldRates.list ? formatRateHandler(oldRates.list) : null;
+  }, [oldRates]);
 
   if (loading) {
     return (
@@ -30,7 +33,7 @@ export default function BankRatesPage() {
     );
   }
 
-  if (error || !formattedData) {
+  if (error || !todayData || !oldData) {
     return (
       <main className="flex min-h-screen justify-center items-center px-6 py-10">
         <div className="text-center">
@@ -47,12 +50,12 @@ export default function BankRatesPage() {
     <div className="page-layout">
       <div className="w-full sticky top-0 left-0 right-0 bg-slate-400">
         <div className="max-w-7xl m-auto flex py-4 cursor-pointer">
-          <div className="w-40 px-2 group-title">Classification</div>
+          <div className="w-20 px-2 group-title"></div>
           <div className="flex-1 flex">
-            <div className="w-44 px-2">Bank Name</div>
+            <div className="w-36 px-2">Bank Name</div>
             <div className="w-32 px-2">Savings</div>
             <MenuRatesComponent
-              rates={formattedData.HKD.virtualBank[0].deposit[0].rates}
+              rates={todayData.HKD.virtualBank[0].deposit[0].rates}
             />
           </div>
           <div className="w-20 px-2 text-right">Min Amt</div>
@@ -60,26 +63,26 @@ export default function BankRatesPage() {
       </div>
 
       <div className="w-full max-w-7xl m-auto text-sm leading-loose page-body">
-        {Object.keys(formattedData).map((currency) => (
+        {Object.keys(todayData).map((currency) => (
           <div className="py-4" key={currency}>
             {/* 货币信息 */}
             <div className="text-4xl font-bold pb-4 text-center">
               {currency}
             </div>
 
-            {Object.keys(formattedData[currency]).map((groupName) => (
+            {Object.keys(todayData[currency]).map((groupName) => (
               // 按银行类型进行分数归组，比如传统银行、虚拟银行
               <div
                 key={groupName}
                 className="flex py-2 bank-group border-b last:border-b-0"
               >
                 {/* 银行类型 */}
-                <div className="w-40 px-2 flex items-center group-title">
+                <div className="w-20 px-2 flex items-center group-title">
                   {formatGroupName(groupName)}
                 </div>
 
                 <div className="flex-1">
-                  {formattedData[currency][groupName].map((bank) => (
+                  {todayData[currency][groupName].map((bank, idx) => (
                     // 每一家银行的详细信息
                     <div key={bank.bankName} className="flex bank-row">
                       <BankNameComponent
@@ -88,12 +91,17 @@ export default function BankRatesPage() {
                       />
 
                       <BankSavingsComponent
-                        savings={bank.savings}
+                        today={bank.savings}
                         savingsUrl={bank.savingsUrl}
+                        old={oldData[currency][groupName][idx].savings}
                       />
 
                       <div className="flex-1">
-                        <BankDepositComponent deposit={bank.deposit} depositUrl={bank.depositUrl} />
+                        <BankDepositComponent
+                          today={bank.deposit}
+                          old={oldData[currency][groupName][idx].deposit}
+                          depositUrl={bank.depositUrl}
+                        />
                       </div>
 
                       <div className="w-20 px-2 text-right">

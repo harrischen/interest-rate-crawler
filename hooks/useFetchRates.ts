@@ -1,18 +1,23 @@
 import { IGetRateResp } from "@/type";
 import { useState, useEffect } from "react";
 
-function useFetchRates() {
-  const [data, setData] = useState({} as IGetRateResp);
-  const [loading, setLoading] = useState(true);
+function useFetchCurrentRates() {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [currentRates, setCurrentRates] = useState({} as IGetRateResp);
+  const [oldRates, setOldRates] = useState({} as IGetRateResp);
 
   useEffect(() => {
     const fetchRates = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/rates`);
-        const json: IGetRateResp = await response.json();
-        setData(json);
+        const currentResp = await fetch(`${process.env.NEXT_PUBLIC_API}/rates`);
+        const currentJson: IGetRateResp = await currentResp.json();
+        setCurrentRates(currentJson);
+
+        const oldResp = await fetch(`${process.env.NEXT_PUBLIC_API}/old`);
+        const oldJson: IGetRateResp = await oldResp.json();
+        setOldRates(oldJson);
       } catch (err) {
         setError("Failed to fetch rates");
       } finally {
@@ -23,7 +28,7 @@ function useFetchRates() {
     fetchRates();
   }, []);
 
-  return { data, loading, error };
+  return { currentRates, oldRates, loading, error };
 }
 
-export default useFetchRates;
+export { useFetchCurrentRates };
