@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { IInterestResp } from "@/type";
 
 interface IBankDepositProps {
@@ -7,21 +7,33 @@ interface IBankDepositProps {
   depositUrl: string;
 }
 
-function compareArrays(array1: string[][], array2: string[][]): string[][] {
-  const rows = array1.length;
-  const cols = array1[0].length;
+function compareArrays(today: string[][], old: string[][]) {
+  const rows = today.length;
+  const cols = today[0].length;
 
-  const result: string[][] = [];
+  const result: ReactElement[][] = [];
 
   for (let i = 0; i < rows; i++) {
-    const row: string[] = [];
+    const row: ReactElement[] = [];
     for (let j = 0; j < cols; j++) {
-      if (Number(array1[i][j]) > Number(array2[i][j])) {
-        row.push("↑");
-      } else if (Number(array1[i][j]) < Number(array2[i][j])) {
-        row.push("↓");
+      if (Number(today[i][j]) > Number(old[i][j])) {
+        row.push(
+          <>
+            {today[i][j] || "-"}
+            <span className="pl-2 text-xs text-red-500">↑</span>
+            <del className="text-xs text-red-500">{old[i][j]}</del>
+          </>
+        );
+      } else if (Number(today[i][j]) < Number(old[i][j])) {
+        row.push(
+          <>
+            {today[i][j] || "-"}
+            <span className="pl-2 text-xs text-green-500">↓</span>
+            <del className="text-xs text-green-500">{old[i][j]}</del>
+          </>
+        );
       } else {
-        row.push("");
+        row.push(<>{today[i][j] || "-"}</>);
       }
     }
     result.push(row);
@@ -33,13 +45,13 @@ function compareArrays(array1: string[][], array2: string[][]): string[][] {
 class BankDepositComponent extends React.Component<IBankDepositProps> {
   render() {
     const { today, old, depositUrl } = this.props;
-    const todayDeposit = today.map((item) => {
-      return Object.keys(item.rates).map((period) => item.rates[period]);
+    const todayDeposit = today.map((i) => {
+      return Object.keys(i.rates).map((p) => i.rates[p]);
     });
-    const oldDeposit = old.map((item) => {
-      return Object.keys(item.rates).map((period) => item.rates[period]);
+    const oldDeposit = old.map((i) => {
+      return Object.keys(i.rates).map((p) => i.rates[p]);
     });
-    const status = compareArrays(todayDeposit, oldDeposit);
+    const depositList = compareArrays(todayDeposit, oldDeposit);
 
     return (
       <>
@@ -54,17 +66,9 @@ class BankDepositComponent extends React.Component<IBankDepositProps> {
                 {today.title || "-"}
               </a>
             </li>
-            {todayDeposit[idx].map((todayRate, subIdx) => (
+            {depositList[idx].map((rate, subIdx) => (
               <li key={subIdx} className="flex-1 px-2">
-                {todayRate || "-"}
-                {todayRate && oldDeposit[idx][subIdx] && status[idx][subIdx] ? (
-                  <>
-                    <span className="pl-2 text-xs">{status[idx][subIdx]}</span>
-                    <del className="text-xs">{oldDeposit[idx][subIdx]}</del>
-                  </>
-                ) : (
-                  ""
-                )}
+                {rate}
               </li>
             ))}
           </ol>

@@ -72,7 +72,6 @@ export async function main() {
   ];
 
   const start = new Date().getTime().toString();
-  const time = dayjs().format("YYYYMMDD");
   const targetContent: IGetRateResp = {
     start,
     end: "",
@@ -88,16 +87,22 @@ export async function main() {
   }
   targetContent.end = new Date().getTime().toString();
   const targetDir = path.join(__dirname, `../public/`);
-  const bankRatesPath = path.join(targetDir, `bank-rates.json`);
+
   // 先将存量的早文件内容拷贝出来
-  const oldContent = GetRateFileContent(bankRatesPath);
+  const yesterday = dayjs().add(-1, "day").format("YYYYMMDD");
+  const oldRatePath = path.join(targetDir, `bank-rates__${yesterday}.json`);
+  const oldContent = GetRateFileContent(oldRatePath);
   const oldFilePath = path.join(targetDir, `bank-rates__old.json`);
+
   // 按日期存储
-  const dailyFilePath = path.join(targetDir, `bank-rates__${time}.json`);
+  const today = dayjs().format("YYYYMMDD");
+  const dailyFilePath = path.join(targetDir, `bank-rates__${today}.json`);
+
   // 保存三份文件，主要是为了防止某一天没有数据，但页面又需要正常展示
   // 1. 将原来的bank-rates.json另存为bank-rates__old.json
   // 2. 固定名字的文件
   // 3. 按时间命名的文件
+  const bankRatesPath = path.join(targetDir, `bank-rates.json`);
   SaveToJsonFile(oldContent, oldFilePath);
   SaveToJsonFile(targetContent, bankRatesPath);
   SaveToJsonFile(targetContent, dailyFilePath);
