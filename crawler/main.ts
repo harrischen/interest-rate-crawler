@@ -22,6 +22,7 @@ import { GetScBankInterestRate } from "./interest-SCB";
 import { GetWeLabBankInterestRate } from "./interest-WeLab";
 import { GetWingLungBankInterestRate } from "./interest-WingLung";
 import { GetZaBankInterestRate } from "./interest-ZA";
+import { IGetRateResp } from "@/type";
 
 export async function main() {
   const browserOptions = {
@@ -44,62 +45,55 @@ export async function main() {
       "--single-process",
     ],
   };
-  const virtualBankBrowser = await puppeteer.launch(browserOptions);
-  const firstStTierBankBrowser = await puppeteer.launch(browserOptions);
-  const OtherTraditionalBankBrowser = await puppeteer.launch(browserOptions);
 
   const promises = [
-    GetFusionBankInterestRate(virtualBankBrowser),
-    GetLiviBankInterestRate(virtualBankBrowser),
-    GetMoxBankInterestRate(virtualBankBrowser),
-    GetPaoBankInterestRate(virtualBankBrowser),
-    GetWeLabBankInterestRate(virtualBankBrowser),
-    GetZaBankInterestRate(virtualBankBrowser),
-    GetAirStarBankInterestRate(virtualBankBrowser),
-    GetAntBankInterestRate(virtualBankBrowser),
+    GetFusionBankInterestRate,
+    GetLiviBankInterestRate,
+    GetMoxBankInterestRate,
+    GetPaoBankInterestRate,
+    GetWeLabBankInterestRate,
+    GetZaBankInterestRate,
+    GetAirStarBankInterestRate,
+    GetAntBankInterestRate,
 
-    GetHsbcBankInterestRate(firstStTierBankBrowser),
-    GetHaseBankInterestRate(firstStTierBankBrowser),
-    GetBocHkBankInterestRate(firstStTierBankBrowser),
-    GetScBankInterestRate(firstStTierBankBrowser),
+    GetHsbcBankInterestRate,
+    GetHaseBankInterestRate,
+    GetBocHkBankInterestRate,
+    GetScBankInterestRate,
 
-    GetDbsBankInterestRate(OtherTraditionalBankBrowser),
-    GetBeaBankInterestRate(OtherTraditionalBankBrowser),
-    GetWingLungBankInterestRate(OtherTraditionalBankBrowser),
-    GetCiticBankInterestRate(OtherTraditionalBankBrowser),
-    GetPublicBankInterestRate(OtherTraditionalBankBrowser),
-    GetHkCommBankInterestRate(OtherTraditionalBankBrowser),
-    GetChBankInterestRate(OtherTraditionalBankBrowser),
-    GetFuBonBankInterestRate(OtherTraditionalBankBrowser),
+    GetDbsBankInterestRate,
+    GetBeaBankInterestRate,
+    GetWingLungBankInterestRate,
+    GetCiticBankInterestRate,
+    GetPublicBankInterestRate,
+    GetHkCommBankInterestRate,
+    GetChBankInterestRate,
+    GetFuBonBankInterestRate,
   ];
 
-  const start = new Date().getTime();
+  const start = new Date().getTime().toString();
   const time = dayjs().format("YYYYMMDD");
-  const resp = await Promise.all(promises);
-  const end = new Date().getTime();
-
-  const targetContent = {
+  const targetContent: IGetRateResp = {
     start,
-    end,
-    list: resp,
+    end: "",
+    list: [],
   };
+
+  for (let i = 0; i < promises.length; i++) {
+    const browser = await puppeteer.launch(browserOptions);
+    const res = await promises[i](browser);
+    console.log(`------------${i}`);
+    targetContent.list.push(res);
+    browser.close();
+  }
+  targetContent.end = new Date().getTime().toString();
   const targetDir = path.join(__dirname, `../public/`);
+  // 保存两份文件，主要是为了防止某一天没有数据，但页面又需要正常展示
+  // 1. 固定名字的文件
+  // 2. 按时间命名的文件
   const defaultFile = path.join(targetDir, `bank-rates.json`);
   const dailyFile = path.join(targetDir, `bank-rates__${time}.json`);
   SaveToJsonFile(targetContent, dailyFile);
   SaveToJsonFile(targetContent, defaultFile);
-
-  console.log("----------virtualBankBrowser----------");
-  console.log(virtualBankBrowser.debugInfo);
-
-  console.log("----------firstStTierBankBrowser----------");
-  console.log(firstStTierBankBrowser.debugInfo);
-
-  console.log("----------OtherTraditionalBankBrowser----------");
-  console.log(OtherTraditionalBankBrowser.debugInfo);
-
-  await virtualBankBrowser.close();
-  await firstStTierBankBrowser.close();
-  await OtherTraditionalBankBrowser.close();
 }
 main();
