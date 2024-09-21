@@ -13,9 +13,9 @@ export async function GetMoxBankInterestRate(browser: puppeteer.Browser) {
   const output: IGetRateData = {
     group: "VirtualBank",
     bankName: "Mox",
-    savingsUrl: `https://www.cncbinternational.com/home/tc/index.jsp`,
-    depositUrl: `https://www.cncbinternational.com/home/tc/index.jsp`,
-    url: "https://www.cncbinternational.com/home/tc/index.jsp",
+    savingsUrl: `https://mox.com/zh/`,
+    depositUrl: `https://mox.com/zh/`,
+    url: "https://mox.com/zh/",
     savings: {
       HKD: "",
       USD: "",
