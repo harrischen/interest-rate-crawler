@@ -89,8 +89,8 @@ export async function main() {
   const targetDir = path.join(__dirname, `../public/`);
 
   // 先将存量的早文件内容拷贝出来
-  const yesterday = dayjs().add(-1, "day").format("YYYYMMDD");
-  const oldRatePath = path.join(targetDir, `bank-rates__${yesterday}.json`);
+  // const yesterday = dayjs().add(-1, "day").format("YYYYMMDD");
+  const oldRatePath = path.join(targetDir, `bank-rates.json`);
   const oldContent = GetRateFileContent(oldRatePath);
   const oldFilePath = path.join(targetDir, `bank-rates__old.json`);
 
