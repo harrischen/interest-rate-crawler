@@ -9,12 +9,20 @@ import BankDepositComponent from "@/components/bankDeposit";
 import { useFetchCurrentRates } from "@/hooks/useFetchRates";
 import BankMinDepositAmtComponent from "@/components/bankMinAmt";
 import { formatGroupName, formatRateHandler } from "@/business/rate-format";
+import dayjs from "dayjs";
 
 export default function BankRatesPage() {
   const { currentRates, oldRates, loading, error } = useFetchCurrentRates();
 
   const todayData = useMemo(() => {
     return currentRates.list ? formatRateHandler(currentRates.list) : null;
+  }, [currentRates]);
+
+  const updateTime = useMemo(() => {
+    const tpl = "YYYY-MM-DD HH:mm:ss";
+    return currentRates?.start
+      ? dayjs(parseInt(currentRates.start, 10)).format(tpl)
+      : "";
   }, [currentRates]);
 
   const oldData = useMemo(() => {
@@ -66,9 +74,8 @@ export default function BankRatesPage() {
         {Object.keys(todayData).map((currency) => (
           <div className="py-4" key={currency}>
             {/* 货币信息 */}
-            <div className="text-4xl font-bold pb-4 text-center">
-              {currency}
-            </div>
+            <div className="text-4xl font-bold text-center">{currency}</div>
+            <p className="text-xs pb-4 text-center">{updateTime}</p>
 
             {Object.keys(todayData[currency]).map((groupName) => (
               // 按银行类型进行分数归组，比如传统银行、虚拟银行
