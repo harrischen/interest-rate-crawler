@@ -107,7 +107,7 @@ function getDetailWithHKD(html: string) {
   output["12M"] = FormatRate(tr.eq(2).find("td").eq(1).text());
 
   return {
-    title: "",
+    title: "網上新資金定期存款優惠",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
@@ -123,7 +123,7 @@ function getDetailWithUSD(html: string) {
   output["12M"] = FormatRate(tr.eq(5).find("td").eq(1).text());
 
   return {
-    title: "",
+    title: "網上新資金定期存款優惠",
     min: "2000",
     rates: FormatInterestOutput(output),
   };
@@ -139,7 +139,7 @@ function getDetailWithCNY(html: string) {
   output["12M"] = FormatRate(tr.eq(8).find("td").eq(1).text());
 
   return {
-    title: "",
+    title: "網上新資金定期存款優惠",
     min: "10000",
     rates: FormatInterestOutput(output),
   };

@@ -107,7 +107,7 @@ function getDetailWithHKD(html: string) {
   output["12M"] = FormatRate($(td).eq(3).text());
 
   return {
-    title: "",
+    title: "智盈理財/自在理財/個人客戶",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
@@ -124,7 +124,7 @@ function getDetailWithUSD(html: string) {
   output["12M"] = FormatRate($(td).eq(3).text());
 
   return {
-    title: "",
+    title: "智盈理財/自在理財/個人客戶",
     min: "1000",
     rates: FormatInterestOutput(output),
   };
@@ -141,7 +141,7 @@ function getDetailWithCNY(html: string) {
   output["12M"] = FormatRate($(td).eq(3).text());
 
   return {
-    title: "",
+    title: "智盈理財/自在理財/個人客戶",
     min: "10000",
     rates: FormatInterestOutput(output),
   };
