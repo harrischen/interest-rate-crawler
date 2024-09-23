@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: `Time Deposit Interest Rates`,
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>{children}</body>
+      <GoogleAnalytics gaId="G-JXJL11RHPP" />
     </html>
   );
 }
