@@ -8,13 +8,24 @@ interface IBankSavingsProps {
 
 class BankSavingsComponent extends React.Component<IBankSavingsProps> {
   render() {
-    let status = "";
+    let statusTpl = <></>;
     const { today, old } = this.props;
     if (today && old && Number(today) !== Number(old)) {
-      status = Number(today) > Number(old) ? "↑" : "↓";
+      statusTpl =
+        Number(today) > Number(old) ? (
+          <>
+            <span className="pl-2 text-xs text-red-500">↑</span>
+            <del className="text-xs text-red-500">{old}</del>
+          </>
+        ) : (
+          <>
+            <span className="pl-2 text-xs text-green-500">↓</span>
+            <del className="text-xs text-green-500">{old}</del>
+          </>
+        );
     }
     return (
-      <div className="w-32 px-2 flex items-center">
+      <div className="w-36 px-2 flex items-center">
         <a
           target="_blank"
           href={this.props.savingsUrl}
@@ -22,7 +33,7 @@ class BankSavingsComponent extends React.Component<IBankSavingsProps> {
         >
           {this.props.today || "-"}
         </a>
-        <span className="pl-2 text-xs">{status || ""}</span>
+        {statusTpl}
       </div>
     );
   }

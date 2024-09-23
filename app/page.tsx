@@ -53,7 +53,7 @@ export default function BankRatesPage() {
           <div className="w-20 px-2 group-title"></div>
           <div className="flex-1 flex">
             <div className="w-36 px-2">Bank Name</div>
-            <div className="w-32 px-2">Savings</div>
+            <div className="w-36 px-2">Savings</div>
             <MenuRatesComponent
               rates={todayData.HKD.virtualBank[0].deposit[0].rates}
             />
