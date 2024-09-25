@@ -1,6 +1,6 @@
 {
-  "start": "1727055048895",
-  "end": "1727055187963",
+  "start": "1727140740423",
+  "end": "1727140896858",
   "list": [
     {
       "bankName": "富融銀行",
@@ -701,8 +701,8 @@
             "rates": {
               "7D": "",
               "1M": "2.65",
-              "3M": "3.30",
-              "6M": "3.30",
+              "3M": "3.25",
+              "6M": "3.25",
               "12M": "2.50"
             }
           }
@@ -727,8 +727,8 @@
             "rates": {
               "7D": "",
               "1M": "3.00",
-              "3M": "4.30",
-              "6M": "4.00",
+              "3M": "4.25",
+              "6M": "3.70",
               "12M": "3.20"
             }
           }
@@ -795,7 +795,7 @@
       "savingsUrl": "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp",
       "depositUrl": "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp",
       "savings": {
-        "HKD": "0.87500",
+        "HKD": "0.62500",
         "CNY": "0.45000",
         "USD": "0.00100"
       },
@@ -805,11 +805,11 @@
             "title": "",
             "min": "10000",
             "rates": {
-              "7D": "0.90000",
+              "7D": "0.70000",
               "1M": "2.30000",
-              "3M": "2.90000",
-              "6M": "3.00000",
-              "12M": "3.00000"
+              "3M": "2.80000",
+              "6M": "2.80000",
+              "12M": "2.80000"
             }
           }
         ],
@@ -901,7 +901,7 @@
       "depositUrl": "https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates",
       "url": "https://www.publicbank.com.hk/tc/",
       "savings": {
-        "HKD": "0.875",
+        "HKD": "0.625",
         "CNY": "",
         "USD": ""
       },
@@ -912,7 +912,7 @@
             "min": "1",
             "rates": {
               "7D": "1.2000",
-              "1M": "3.0000",
+              "1M": "3.1000",
               "3M": "3.4000",
               "6M": "3.2000",
               "12M": "3.1000"
