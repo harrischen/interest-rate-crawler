@@ -82,7 +82,7 @@ function getDetailWithHKD(html: string) {
   output["7D"] = FormatRate(tr.eq(1).find("td").eq(2).text());
   output["1M"] = FormatRate(tr.eq(2).find("td").eq(1).text());
   output["3M"] = FormatRate(tr.eq(4).find("td").eq(1).text());
-  output["6M"] = FormatRate(tr.eq(6).find("td").eq(1).text());
+  output["6M"] = FormatRate(tr.eq(5).find("td").eq(1).text());
   output["12M"] = FormatRate(tr.eq(7).find("td").eq(1).text());
 
   return {
