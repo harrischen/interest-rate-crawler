@@ -6,6 +6,7 @@ import {
   GetInterestTemplate,
   FormatInterestOutput,
   FormatRate,
+  FormatPeriod,
 } from "./common";
 
 /**
@@ -78,12 +79,22 @@ function getDetailWithHKD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
 
-  const tr = $("#saving tbody tr");
-  output["7D"] = FormatRate(tr.eq(1).find("td").eq(2).text());
-  output["1M"] = FormatRate(tr.eq(2).find("td").eq(1).text());
-  output["3M"] = FormatRate(tr.eq(4).find("td").eq(1).text());
-  output["6M"] = FormatRate(tr.eq(5).find("td").eq(1).text());
-  output["12M"] = FormatRate(tr.eq(7).find("td").eq(1).text());
+  const target = $('#saving td:contains("港幣")');
+  const firstRow = target.parent("tr");
+  const targetPeriod = FormatPeriod(firstRow.find("td").eq(1).text());
+  const targetRate = FormatRate(firstRow.find("td").eq(2).text());
+  output[targetPeriod] = targetRate;
+
+  const rowspan = target.attr("rowspan");
+  const targetNextAll = firstRow.nextAll().slice(0, Number(rowspan) - 1);
+
+  $(targetNextAll).each((_, row) => {
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(1).text());
+    if (rate && period && output[period] === "") {
+      output[period] = rate;
+    }
+  });
 
   return {
     title: "星息定存 提取自如",
@@ -96,12 +107,22 @@ function getDetailWithUSD(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
 
-  const tr = $("#saving tbody tr");
-  output["7D"] = FormatRate(tr.eq(15).find("td").eq(2).text());
-  output["1M"] = FormatRate(tr.eq(16).find("td").eq(1).text());
-  output["3M"] = FormatRate(tr.eq(18).find("td").eq(1).text());
-  output["6M"] = FormatRate(tr.eq(19).find("td").eq(1).text());
-  output["12M"] = FormatRate(tr.eq(21).find("td").eq(1).text());
+  const target = $('#saving td:contains("美元")');
+  const firstRow = target.parent("tr");
+  const targetPeriod = FormatPeriod(firstRow.find("td").eq(1).text());
+  const targetRate = FormatRate(firstRow.find("td").eq(2).text());
+  output[targetPeriod] = targetRate;
+
+  const rowspan = target.attr("rowspan");
+  const targetNextAll = firstRow.nextAll().slice(0, Number(rowspan) - 1);
+
+  $(targetNextAll).each((_, row) => {
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(1).text());
+    if (rate && period && output[period] === "") {
+      output[period] = rate;
+    }
+  });
 
   return {
     title: "星息定存 提取自如",
@@ -114,12 +135,22 @@ function getDetailWithCNY(html: string) {
   const $ = cheerio.load(html);
   const output = GetInterestTemplate();
 
-  const tr = $("#saving tbody tr");
-  output["7D"] = FormatRate(tr.eq(8).find("td").eq(2).text());
-  output["1M"] = FormatRate(tr.eq(9).find("td").eq(1).text());
-  output["3M"] = FormatRate(tr.eq(11).find("td").eq(1).text());
-  output["6M"] = FormatRate(tr.eq(12).find("td").eq(1).text());
-  output["12M"] = FormatRate(tr.eq(14).find("td").eq(1).text());
+  const target = $('#saving td:contains("人民幣")');
+  const firstRow = target.parent("tr");
+  const targetPeriod = FormatPeriod(firstRow.find("td").eq(1).text());
+  const targetRate = FormatRate(firstRow.find("td").eq(2).text());
+  output[targetPeriod] = targetRate;
+
+  const rowspan = target.attr("rowspan");
+  const targetNextAll = firstRow.nextAll().slice(0, Number(rowspan) - 1);
+
+  $(targetNextAll).each((_, row) => {
+    const period = FormatPeriod($(row).find("td").eq(0).text());
+    const rate = FormatRate($(row).find("td").eq(1).text());
+    if (rate && period && output[period] === "") {
+      output[period] = rate;
+    }
+  });
 
   return {
     title: "星息定存 提取自如",
