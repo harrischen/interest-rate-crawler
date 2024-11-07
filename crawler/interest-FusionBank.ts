@@ -48,17 +48,17 @@ export async function GetFusionBankInterestRate(browser: puppeteer.Browser) {
       timeout: 0,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     const hkdDepositContent = await depositPage.content();
     output.deposit.HKD = getDepositDetail(hkdDepositContent).HKD;
 
     await depositPage.click(".deposit-time-item:nth-child(2)");
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     const cnyDepositContent = await depositPage.content();
     output.deposit.CNY = getDepositDetail(cnyDepositContent).CNY;
 
     await depositPage.click(".deposit-time-item:last-child");
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     const usdDepositContent = await depositPage.content();
     output.deposit.USD = getDepositDetail(usdDepositContent).USD;
 
