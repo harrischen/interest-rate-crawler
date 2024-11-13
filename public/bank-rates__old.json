@@ -1,6 +1,6 @@
 {
-  "start": "1731213620854",
-  "end": "1731213873654",
+  "start": "1731399208179",
+  "end": "1731399370755",
   "list": [
     {
       "bankName": "富融銀行",
@@ -191,7 +191,7 @@
             "rates": {
               "7D": "",
               "1M": "3.00",
-              "3M": "3.40",
+              "3M": "3.50",
               "6M": "3.30",
               "12M": "3.10"
             }
@@ -444,9 +444,9 @@
       "savingsUrl": "https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/",
       "depositUrl": "https://www.hsbc.com.hk/zh-hk/accounts/offers/deposits/",
       "savings": {
-        "HKD": "0.6250",
+        "HKD": "0.3750",
         "CNY": "0.1000",
-        "USD": "0.7500"
+        "USD": "0.5000"
       },
       "deposit": {
         "HKD": [
@@ -530,7 +530,7 @@
       "savingsUrl": "https://www.hangsengbank.com/zh-hk/personal/banking/rates/deposit-interest-rates/",
       "depositUrl": "https://cms.hangseng.com/cms/emkt/pmo/grp06/p04/chi/index.html",
       "savings": {
-        "HKD": "0.6250",
+        "HKD": "0.3750",
         "USD": "",
         "CNY": ""
       },
@@ -583,8 +583,8 @@
       "savingsUrl": "https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk",
       "depositUrl": "https://www.bochk.com/tc/deposits/promotion/timedeposits.html",
       "savings": {
-        "HKD": "0.62500",
-        "USD": "0.75000",
+        "HKD": "0.37500",
+        "USD": "0.50000",
         "CNY": "0.10000"
       },
       "deposit": {
@@ -636,9 +636,9 @@
       "savingsUrl": "https://www.sc.com/hk/zh/deposits/board-rates/",
       "depositUrl": "https://www.sc.com/hk/zh/deposits/online-time-deposit/",
       "savings": {
-        "HKD": "0.625",
+        "HKD": "0.375",
         "CNY": "0.10",
-        "USD": "0.625"
+        "USD": "0.375"
       },
       "deposit": {
         "HKD": [
@@ -674,7 +674,7 @@
             "rates": {
               "7D": "",
               "1M": "",
-              "3M": "3.70",
+              "3M": "3.60",
               "6M": "3.70",
               "12M": "3.30"
             }
@@ -742,7 +742,7 @@
       "savingsUrl": "https://www.hkbea.com/cgi-bin/rate_hkddr.jsp?language=tc&language=tc",
       "depositUrl": "https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html",
       "savings": {
-        "HKD": "0.6250",
+        "HKD": "0.3750",
         "CNY": "",
         "USD": ""
       },
@@ -911,7 +911,7 @@
             "title": "",
             "min": "1",
             "rates": {
-              "7D": "1.2000",
+              "7D": "1.1000",
               "1M": "2.9000",
               "3M": "3.4000",
               "6M": "3.2000",
@@ -1071,8 +1071,8 @@
             "min": "500000",
             "rates": {
               "7D": "",
-              "1M": "3.55",
-              "3M": "3.65",
+              "1M": "3.5",
+              "3M": "3.6",
               "6M": "3.3",
               "12M": "3.2"
             }
@@ -1098,7 +1098,7 @@
             "rates": {
               "7D": "",
               "1M": "4.4",
-              "3M": "4.55",
+              "3M": "4.5",
               "6M": "4.3",
               "12M": "4.1"
             }
