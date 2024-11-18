@@ -1,6 +1,6 @@
 {
-  "start": "1731564177256",
-  "end": "1731564348988",
+  "start": "1731650867043",
+  "end": "1731651028939",
   "list": [
     {
       "bankName": "富融銀行",
@@ -689,7 +689,7 @@
       "depositUrl": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo",
       "url": "https://www.dbs.com.hk/personal-zh/default.page",
       "savings": {
-        "HKD": "0.50",
+        "HKD": "0.25",
         "CNY": "",
         "USD": ""
       },
@@ -925,10 +925,10 @@
             "min": "1",
             "rates": {
               "7D": "0.7000",
-              "1M": "1.7000",
+              "1M": "1.8000",
               "3M": "1.8000",
-              "6M": "1.6000",
-              "12M": "1.5000"
+              "6M": "1.7000",
+              "12M": "1.6000"
             }
           }
         ],
