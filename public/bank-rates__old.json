@@ -1,6 +1,6 @@
 {
-  "start": "1734594647729",
-  "end": "1734594814228",
+  "start": "1734918558420",
+  "end": "1734918708347",
   "list": [
     {
       "bankName": "富融銀行",
@@ -63,7 +63,7 @@
       "depositUrl": "https://www.livibank.com/zh_HK/features/livisave.html",
       "savings": {
         "HKD": "1.000",
-        "USD": "2.50",
+        "USD": "3.088",
         "CNY": "1.00"
       },
       "deposit": {
@@ -444,9 +444,9 @@
       "savingsUrl": "https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/",
       "depositUrl": "https://www.hsbc.com.hk/zh-hk/accounts/offers/deposits/",
       "savings": {
-        "HKD": "0.3750",
+        "HKD": "0.2500",
         "CNY": "0.1000",
-        "USD": "0.5000"
+        "USD": "0.3750"
       },
       "deposit": {
         "HKD": [
@@ -583,8 +583,8 @@
       "savingsUrl": "https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk",
       "depositUrl": "https://www.bochk.com/tc/deposits/promotion/timedeposits.html",
       "savings": {
-        "HKD": "0.37500",
-        "USD": "0.50000",
+        "HKD": "0.25000",
+        "USD": "0.37500",
         "CNY": "0.10000"
       },
       "deposit": {
@@ -742,7 +742,7 @@
       "savingsUrl": "https://www.hkbea.com/cgi-bin/rate_hkddr.jsp?language=tc&language=tc",
       "depositUrl": "https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html",
       "savings": {
-        "HKD": "0.3750",
+        "HKD": "0.2500",
         "CNY": "",
         "USD": ""
       },
@@ -795,7 +795,7 @@
       "savingsUrl": "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp",
       "depositUrl": "https://www.cmbwinglungbank.com/ibanking/CnCoFiiDepratDsp.jsp",
       "savings": {
-        "HKD": "0.37500",
+        "HKD": "0.25000",
         "CNY": "0.45000",
         "USD": "0.00100"
       },
@@ -901,7 +901,7 @@
       "depositUrl": "https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates",
       "url": "https://www.publicbank.com.hk/tc/",
       "savings": {
-        "HKD": "0.375",
+        "HKD": "0.250",
         "CNY": "",
         "USD": ""
       },
@@ -912,8 +912,8 @@
             "min": "1",
             "rates": {
               "7D": "1.0000",
-              "1M": "3.2000",
-              "3M": "3.4000",
+              "1M": "3.4000",
+              "3M": "3.5000",
               "6M": "3.2000",
               "12M": "2.9000"
             }
@@ -925,7 +925,7 @@
             "min": "1",
             "rates": {
               "7D": "0.7000",
-              "1M": "1.7000",
+              "1M": "1.6000",
               "3M": "1.7000",
               "6M": "1.5000",
               "12M": "1.5000"
@@ -938,10 +938,10 @@
             "min": "1",
             "rates": {
               "7D": "0.6000",
-              "1M": "3.7000",
+              "1M": "3.7500",
               "3M": "4.1000",
-              "6M": "3.7000",
-              "12M": "3.3000"
+              "6M": "3.8000",
+              "12M": "3.6000"
             }
           }
         ]
@@ -1060,7 +1060,7 @@
       "savingsUrl": "https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml?tab=cloudRate",
       "depositUrl": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html",
       "savings": {
-        "HKD": "0.3750",
+        "HKD": "0.2500",
         "CNY": "0.3500",
         "USD": "0.0010"
       },
