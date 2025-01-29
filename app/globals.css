@@ -1,26 +1,116 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
-  --foreground: rgb(0, 0, 0);
-  --background: rgb(255, 255, 255);
+  /* 基础颜色变量 */
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #1a56db;
+  --border-color: #e5e7eb;
+  --hover-color: #f3f4f6;
+  --header-bg: #f9fafb;
+  --group-header-bg: #e5e7eb;
+  --default-hover-bg: rgb(226 232 240);
+  --target-hover-bg: rgb(203 213 225);
+  
+  /* 状态颜色 */
+  --success-color: #059669;
+  --error-color: #dc2626;
+  
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
 }
 
+/* 暗色主题 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground: rgb(255, 255, 255);
-    --background: rgb(0, 0, 0);
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+    --border-color: #374151;
+    --hover-color: #2d2d2d;
+    --header-bg: #111111;
+    --group-header-bg: #2d2d2d;
+    --default-hover-bg: rgb(63 63 70);
+    --target-hover-bg: rgb(39 39 42);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
+/* 重置默认样式 */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+html,
+body {
+  max-width: 100vw;
+  overflow-x: auto;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* 基础链接样式 */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 基础表格样式 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: var(--spacing-md);
+  text-align: left;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* 基础动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 响应式布局的基础断点 */
+@media (max-width: 768px) {
+  .currency-section {
+    padding: var(--spacing-md);
+  }
+  
+  .bank-table th,
+  .bank-table td {
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: var(--spacing-sm);
   }
 }

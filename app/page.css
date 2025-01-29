@@ -1,15 +1,3 @@
-:root {
-  --default-hover-bg: rgb(226 232 240);
-  --target-hover-bg: rgb(203 213 225);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --default-hover-bg: rgb(63 63 70);
-    --target-hover-bg: rgb(39 39 42);
-  }
-}
-
 .bank-row:hover {
   background: var(--default-hover-bg);
 }
@@ -20,4 +8,461 @@
 
 .page-body li:hover {
   background: var(--target-hover-bg);
+}
+
+.page-layout {
+  width: 100%;
+  min-height: 100vh;
+  padding: var(--spacing-md);
+  background-color: var(--background-color);
+}
+
+.table-container {
+  position: relative;
+  margin-bottom: var(--spacing-xl);
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.currency-section {
+  width: 100%;
+  min-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) 0;
+}
+
+.currency-container {
+  margin-bottom: var(--spacing-xl);
+}
+
+.currency-title {
+  text-align: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.update-time {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.bank-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bank-table th,
+.bank-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.bank-table th {
+  background-color: var(--header-bg);
+}
+
+/* 合并为一个完整的定义 */
+.bank-group-header td {
+  background-color: var(--group-header-bg);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: 1.125rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.bank-row {
+  transition: background-color 0.2s;
+}
+
+.bank-row:hover {
+  background-color: var(--hover-color);
+}
+
+/* 列宽定义 */
+.bank-column {
+  width: 160px;
+  background-color: var(--background-color);
+}
+
+.savings-column {
+  width: 120px;
+  background-color: var(--background-color);
+}
+
+.deposit-column {
+  min-width: 200px;
+}
+
+/* 错误状态样式 */
+.error-container {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.bank-name {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.bank-name:hover,
+.deposit-link:hover {
+  text-decoration: underline;
+}
+
+.rate-up,
+.rate-down {
+  padding-left: var(--spacing-sm);
+}
+
+.rate-up {
+  color: var(--error-color);
+}
+
+.rate-down {
+  color: var(--success-color);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-dots {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.loading-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  animation: bounce 0.5s infinite alternate;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+/* 数字格式化 */
+.rate-column,
+.amount-column {
+  width: 100px;
+  text-align: right;
+  font-family: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  padding-right: var(--spacing-lg);
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .currency-section,
+  .bank-table {
+    min-width: 1200px;
+  }
+}
+
+/* 修改表头的 deposit-title 样式 */
+.bank-table thead .deposit-title {
+  width: 240px;
+  font-size: 1rem; /* 或者你想要的其他大小 */
+  color: inherit; /* 使用默认文字颜色 */
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* 修改表体的 deposit-title 样式 */
+.bank-table tbody .deposit-title {
+  width: 240px;
+  font-size: 0.875rem; /* 12px */
+  color: var(--text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* 移除原来的 deposit-title 样式 */
+.deposit-title {
+  width: 240px;
+  padding: 0 var(--spacing-sm);
+}
+
+.bank-row td {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 调整所有表格单元格的垂直对齐方式 */
+.bank-table td,
+.bank-table th {
+  vertical-align: middle;
+}
+
+/* 优化hover效果 */
+.bank-row:hover td,
+.bank-row:hover td[rowspan] {
+  background-color: var(--hover-color);
+}
+
+/* 移除旧的垂直对齐样式 */
+.bank-column,
+.savings-column {
+  background-color: var(--background-color);
+}
+
+/* MenuRates 组件样式 */
+.menu-rates {
+  display: flex;
+  align-items: center;
+}
+
+.menu-tip {
+  width: 176px;
+  padding: 0 var(--spacing-sm);
+}
+
+.menu-rate {
+  flex: 1;
+  padding: 0 var(--spacing-sm);
+}
+
+/* BankDeposit 组件样式 */
+.deposit-container {
+  width: 100%;
+}
+
+.deposit-list {
+  display: flex;
+  align-items: center;
+}
+
+.deposit-link {
+  color: var(--text-secondary);
+  text-decoration-offset: 4px;
+}
+
+.deposit-rate {
+  flex: 1;
+  padding: 0 var(--spacing-sm);
+}
+
+.rate-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* BankName 组件样式 */
+.bank-name-wrapper {
+  display: contents;
+}
+
+.bank-name-link {
+  color: #d68438; /* 温暖的橙褐色 */
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: all 0.3s ease;
+}
+
+.bank-name-link:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* BankSavings 组件样式 */
+.savings-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.savings-link {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', 'Roboto Mono', Monaco, 'Noto Sans Mono', Menlo, Consolas, monospace;
+  color: #d68438;
+}
+
+.savings-link:hover {
+  text-decoration: underline;
+}
+
+/* 添加 Tab 相关样式 */
+.currency-tabs {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 2px;
+  position: relative;
+}
+
+.currency-tab {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  position: relative;
+  transition: color 0.3s;
+}
+
+.currency-tab:hover {
+  color: #d68438;
+}
+
+.currency-tab.active {
+  color: #d68438;
+}
+
+.currency-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #d68438;
+}
+
+/* 移除不需要的样式 */
+.currency-title {
+  display: none;
+}
+
+/* 调整容器样式 */
+.currency-container {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 确保表格容器样式正确 */
+.table-container {
+  position: relative;
+  margin-bottom: var(--spacing-xl);
+  overflow-x: auto;
+}
+
+/* 确保tabs居中 */
+.tabs-wrapper {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* 修改链接颜色 */
+.bank-name-link {
+  color: #d68438; /* 温暖的橙褐色 */
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .bank-name-link {
+  color: #e6a972; /* 暗色模式下更柔和的橙色 */
+}
+
+/* Tab 按钮样式 */
+.currency-tab:hover,
+.currency-tab.active {
+  color: #d68438;
+}
+
+[data-theme="dark"] .currency-tab:hover,
+[data-theme="dark"] .currency-tab.active {
+  color: #e6a972;
+}
+
+.currency-tab.active::after {
+  background-color: #d68438;
+}
+
+[data-theme="dark"] .currency-tab.active::after {
+  background-color: #e6a972;
+}
+
+/* 存款链接样式 */
+.savings-link {
+  color: #d68438;
+}
+
+[data-theme="dark"] .savings-link {
+  color: #e6a972;
+}
+
+/* Loading dots 颜色 */
+.loading-dot {
+  background-color: #d68438;
+}
+
+[data-theme="dark"] .loading-dot {
+  background-color: #e6a972;
+}
+
+/* 涨跌颜色保持不变，因为这些需要明显的区分度 */
+.rate-up {
+  color: #e57373;
+}
+
+.rate-down {
+  color: #81c784;
+}
+
+[data-theme="dark"] .rate-up {
+  color: #ef9a9a;
+}
+
+[data-theme="dark"] .rate-down {
+  color: #a5d6a7;
+}
+
+/* 定义数字字体 */
+.rate-column,
+.amount-column,
+.savings-link {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', 'Roboto Mono', Monaco, 'Noto Sans Mono', Menlo, Consolas, monospace;
+  text-align: right;
+  padding-right: var(--spacing-lg);
 }

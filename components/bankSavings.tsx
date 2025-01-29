@@ -14,22 +14,22 @@ class BankSavingsComponent extends React.Component<IBankSavingsProps> {
       statusTpl =
         Number(today) > Number(old) ? (
           <>
-            <span className="pl-2 text-xs text-red-500">↑</span>
-            <del className="text-xs text-red-500">{old}</del>
+            <span className="rate-up">↑</span>
+            <del className="rate-up">{old}</del>
           </>
         ) : (
           <>
-            <span className="pl-2 text-xs text-green-500">↓</span>
-            <del className="text-xs text-green-500">{old}</del>
+            <span className="rate-down">↓</span>
+            <del className="rate-down">{old}</del>
           </>
         );
     }
     return (
-      <div className="w-36 px-2 flex items-center">
+      <div className="savings-wrapper">
         <a
           target="_blank"
           href={this.props.savingsUrl}
-          className="underline-offset-4 hover:underline"
+          className="savings-link"
         >
           {this.props.today || "-"}
         </a>

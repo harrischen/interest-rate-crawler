@@ -18,22 +18,22 @@ function compareArrays(today: string[][], old: string[][]) {
     for (let j = 0; j < cols; j++) {
       if (Number(today[i][j]) > Number(old[i][j])) {
         row.push(
-          <>
+          <span className="rate-item">
             {today[i][j] || "-"}
-            <span className="pl-2 text-xs text-red-500">↑</span>
-            <del className="text-xs text-red-500">{old[i][j]}</del>
-          </>
+            <span className="rate-up">↑</span>
+            <del className="rate-up">{old[i][j]}</del>
+          </span>
         );
       } else if (Number(today[i][j]) < Number(old[i][j])) {
         row.push(
-          <>
+          <span className="rate-item">
             {today[i][j] || "-"}
-            <span className="pl-2 text-xs text-green-500">↓</span>
-            <del className="text-xs text-green-500">{old[i][j]}</del>
-          </>
+            <span className="rate-down">↓</span>
+            <del className="rate-down">{old[i][j]}</del>
+          </span>
         );
       } else {
-        row.push(<>{today[i][j] || "-"}</>);
+        row.push(<span className="rate-item">{today[i][j] || "-"}</span>);
       }
     }
     result.push(row);
@@ -54,26 +54,26 @@ class BankDepositComponent extends React.Component<IBankDepositProps> {
     const depositList = compareArrays(todayDeposit, oldDeposit);
 
     return (
-      <>
+      <div className="deposit-container">
         {today.map((today, idx) => (
-          <ol className="flex items-center" key={idx}>
-            <li className="w-44 px-2">
+          <div className="deposit-list" key={idx}>
+            <div className="deposit-title">
               <a
                 target="_blank"
                 href={depositUrl}
-                className="text-xs text-gray-400 underline-offset-4 hover:underline"
+                className="deposit-link"
               >
                 {today.title || "-"}
               </a>
-            </li>
+            </div>
             {depositList[idx].map((rate, subIdx) => (
-              <li key={subIdx} className="flex-1 px-2">
+              <div key={subIdx} className="deposit-rate">
                 {rate}
-              </li>
+              </div>
             ))}
-          </ol>
+          </div>
         ))}
-      </>
+      </div>
     );
   }
 }

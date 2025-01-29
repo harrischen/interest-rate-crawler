@@ -8,15 +8,15 @@ interface IBankNameProps {
 class BankNameComponent extends React.Component<IBankNameProps> {
   render() {
     return (
-      <h3 className="w-36 px-2 flex items-center">
+      <div className="bank-name-wrapper">
         <a
           target="_blank"
           href={this.props.url}
-          className="underline-offset-4 hover:underline"
+          className="bank-name-link"
         >
           {this.props.bankName}
         </a>
-      </h3>
+      </div>
     );
   }
 }
