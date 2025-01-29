@@ -28,6 +28,7 @@ const getPeriods = (
 export default function BankRatesPage() {
   const { currentRates, oldRates, loading, error } = useFetchCurrentRates();
   const [activeTab, setActiveTab] = useState<string>('');
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
 
   const todayData = useMemo(() => {
     return currentRates.list ? formatRateHandler(currentRates.list) : null;
@@ -53,6 +54,33 @@ export default function BankRatesPage() {
   const oldData = useMemo(() => {
     return oldRates.list ? formatRateHandler(oldRates.list) : null;
   }, [oldRates]);
+
+  // 处理列hover事件
+  const handleColumnHover = (columnIndex: number | null) => {
+    setHoveredColumn(columnIndex);
+  };
+
+  // 获取列的类名
+  const getColumnClassName = (columnIndex: number, isHeader = false) => {
+    let baseClass = '';
+    // 根据列索引添加对应的基础样式类
+    if (columnIndex === 0) {
+      baseClass = 'bank-column';
+    } else if (columnIndex === 1) {
+      baseClass = 'savings-column';
+    } else if (columnIndex === 2) {
+      baseClass = 'deposit-title';
+    } else if (columnIndex === periods.length + 3) {
+      baseClass = 'amount-column';
+    } else {
+      baseClass = 'rate-column';
+    }
+    
+    // 添加 hover 效果的类名
+    const hoverClass = hoveredColumn === columnIndex ? 'column-hover' : '';
+    
+    return `${baseClass} ${isHeader ? 'bank-table-th' : 'bank-table-td'} ${hoverClass}`.trim();
+  };
 
   if (loading) {
     return (
@@ -102,15 +130,44 @@ export default function BankRatesPage() {
                 <table className="bank-table">
                   <thead>
                     <tr>
-                      <th className="bank-column">銀行名稱</th>
-                      <th className="savings-column">活期存款</th>
-                      <th className="deposit-title">定期存款</th>
-                      {periods.map((period) => (
-                        <th key={period} className="rate-column">
+                      <th 
+                        className={getColumnClassName(0, true)}
+                        onMouseEnter={() => handleColumnHover(0)}
+                        onMouseLeave={() => handleColumnHover(null)}
+                      >
+                        銀行名稱
+                      </th>
+                      <th 
+                        className={getColumnClassName(1, true)}
+                        onMouseEnter={() => handleColumnHover(1)}
+                        onMouseLeave={() => handleColumnHover(null)}
+                      >
+                        活期存款
+                      </th>
+                      <th 
+                        className={getColumnClassName(2, true)}
+                        onMouseEnter={() => handleColumnHover(2)}
+                        onMouseLeave={() => handleColumnHover(null)}
+                      >
+                        定期存款
+                      </th>
+                      {periods.map((period, index) => (
+                        <th 
+                          key={period}
+                          className={getColumnClassName(index + 3, true)}
+                          onMouseEnter={() => handleColumnHover(index + 3)}
+                          onMouseLeave={() => handleColumnHover(null)}
+                        >
                           {period}
                         </th>
                       ))}
-                      <th className="amount-column">起存金額</th>
+                      <th 
+                        className={getColumnClassName(periods.length + 3, true)}
+                        onMouseEnter={() => handleColumnHover(periods.length + 3)}
+                        onMouseLeave={() => handleColumnHover(null)}
+                      >
+                        起存金額
+                      </th>
                     </tr>
                   </thead>
                 </table>
@@ -129,41 +186,53 @@ export default function BankRatesPage() {
                         {todayData[activeTab][groupName].map((bank, idx) => {
                           const depositCount = bank.deposit.length;
                           return bank.deposit.map((depositItem, depositIdx) => (
-                            <tr
-                              key={`${bank.bankName}-${depositIdx}`}
-                              className="bank-row"
-                            >
+                            <tr key={`${bank.bankName}-${depositIdx}`}>
                               {depositIdx === 0 && (
                                 <td
-                                  className="bank-column"
+                                  className={getColumnClassName(0)}
                                   rowSpan={depositCount}
+                                  onMouseEnter={() => handleColumnHover(0)}
+                                  onMouseLeave={() => handleColumnHover(null)}
                                 >
                                   <BankNameComponent url={bank.url} bankName={bank.bankName} />
                                 </td>
                               )}
                               {depositIdx === 0 && (
                                 <td
-                                  className="savings-column"
+                                  className={getColumnClassName(1)}
                                   rowSpan={depositCount}
+                                  onMouseEnter={() => handleColumnHover(1)}
+                                  onMouseLeave={() => handleColumnHover(null)}
                                 >
                                   <BankSavingsComponent
                                     today={bank.savings}
                                     savingsUrl={bank.savingsUrl}
-                                    old={
-                                      oldData[activeTab][groupName][idx].savings
-                                    }
+                                    old={oldData[activeTab][groupName][idx].savings}
                                   />
                                 </td>
                               )}
-                              <td className="deposit-title">
+                              <td
+                                className={getColumnClassName(2)}
+                                onMouseEnter={() => handleColumnHover(2)}
+                                onMouseLeave={() => handleColumnHover(null)}
+                              >
                                 {depositItem.title || "-"}
                               </td>
-                              {periods.map((period) => (
-                                <td key={period} className="rate-column">
+                              {periods.map((period, index) => (
+                                <td
+                                  key={period}
+                                  className={getColumnClassName(index + 3)}
+                                  onMouseEnter={() => handleColumnHover(index + 3)}
+                                  onMouseLeave={() => handleColumnHover(null)}
+                                >
                                   {depositItem.rates[period] || "-"}
                                 </td>
                               ))}
-                              <td className="amount-column">
+                              <td
+                                className={getColumnClassName(periods.length + 3)}
+                                onMouseEnter={() => handleColumnHover(periods.length + 3)}
+                                onMouseLeave={() => handleColumnHover(null)}
+                              >
                                 {depositItem.min || "-"}
                               </td>
                             </tr>

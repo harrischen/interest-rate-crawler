@@ -235,16 +235,64 @@
   vertical-align: middle;
 }
 
-/* 优化hover效果 */
+/* 移除旧的hover样式 */
 .bank-row:hover td,
 .bank-row:hover td[rowspan] {
   background-color: var(--hover-color);
 }
 
-/* 移除旧的垂直对齐样式 */
-.bank-column,
-.savings-column {
-  background-color: var(--background-color);
+/* 添加新的hover效果 */
+/* 当hover在td上时，高亮当前行 */
+.bank-table tr:hover td {
+  background-color: var(--hover-color);
+}
+
+/* 当hover在特定列时，高亮整列 */
+.bank-table td:hover,
+.bank-table td:hover ~ td {
+  background-color: var(--hover-color);
+}
+
+/* 高亮同一列的其他单元格 */
+.bank-table td:hover ~ tr td:nth-child(1),
+.bank-table td:nth-child(1):hover ~ td {
+  background-color: var(--hover-color);
+}
+
+/* 为每个列添加hover效果 */
+.bank-column:hover,
+.bank-table .bank-column:hover ~ tr .bank-column {
+  background-color: var(--hover-color) !important;
+}
+
+.savings-column:hover,
+.bank-table .savings-column:hover ~ tr .savings-column {
+  background-color: var(--hover-color) !important;
+}
+
+.deposit-title:hover,
+.bank-table .deposit-title:hover ~ tr .deposit-title {
+  background-color: var(--hover-color) !important;
+}
+
+.rate-column:hover,
+.bank-table .rate-column:hover ~ tr .rate-column {
+  background-color: var(--hover-color) !important;
+}
+
+.amount-column:hover,
+.bank-table .amount-column:hover ~ tr .amount-column {
+  background-color: var(--hover-color) !important;
+}
+
+/* 确保表头不受影响 */
+.bank-table thead th:hover {
+  background-color: var(--header-bg);
+}
+
+/* 确保分组标题不受影响 */
+.bank-group-header td:hover {
+  background-color: var(--group-header-bg) !important;
 }
 
 /* MenuRates 组件样式 */
@@ -465,4 +513,21 @@
   font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', 'Roboto Mono', Monaco, 'Noto Sans Mono', Menlo, Consolas, monospace;
   text-align: right;
   padding-right: var(--spacing-lg);
+}
+
+/* 移除之前的hover相关样式 */
+
+/* 添加新的hover效果 */
+.column-hover {
+  background-color: var(--hover-color) !important;
+}
+
+/* 确保表头样式不受影响 */
+.bank-table-th.column-hover {
+  background-color: var(--header-bg) !important;
+}
+
+/* 确保分组标题样式不受影响 */
+.bank-group-header td.column-hover {
+  background-color: var(--group-header-bg) !important;
 }
