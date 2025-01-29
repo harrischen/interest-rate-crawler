@@ -84,13 +84,55 @@ export async function main() {
     list: [],
   };
 
-  for (let i = 0; i < promises.length; i++) {
-    const browser = await puppeteer.launch(browserOptions);
-    const res = await promises[i](browser);
-    console.log(`------------${i}`);
-    targetContent.list.push(res);
-    await browser.close();
+  // 并发控制函数
+  async function batchProcess(tasks: typeof promises, batchSize: number) {
+    const results: any[] = [];
+    
+    for (let i = 0; i < tasks.length; i += batchSize) {
+      const batch = tasks.slice(i, i + batchSize);
+      console.log(`Processing batch ${i / batchSize + 1}, size: ${batch.length}`);
+      
+      const batchPromises = batch.map(async (task, index) => {
+        try {
+          const browser = await puppeteer.launch(browserOptions);
+          // 添加重试机制
+          let retries = 3;
+          let result = null;
+          
+          while (retries > 0) {
+            try {
+              result = await task(browser);
+              break;
+            } catch (error) {
+              retries--;
+              if (retries === 0) throw error;
+              console.log(`Retrying task ${i + index}, attempts left: ${retries}`);
+              await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+          }
+          
+          await browser.close();
+          return result;
+        } catch (error) {
+          console.error(`Error in task ${i + index}:`, error);
+          return null;
+        }
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      results.push(...batchResults.filter(result => result !== null));
+      
+      // 批次间增加短暂延迟，避免触发反爬
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
+    return results;
   }
+
+  // 使用 batchProcess 处理所有任务，这里设置并发数为 3
+  const results = await batchProcess(promises, 5);
+  targetContent.list = results;
+  
   targetContent.end = new Date().getTime().toString();
   const targetDir = path.join(__dirname, `../public/`);
 
