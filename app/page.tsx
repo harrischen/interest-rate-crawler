@@ -27,7 +27,7 @@ const getPeriods = (
 
 export default function BankRatesPage() {
   const { currentRates, oldRates, loading, error } = useFetchCurrentRates();
-  const [activeTab, setActiveTab] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<string>("");
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
 
   const todayData = useMemo(() => {
@@ -62,24 +62,26 @@ export default function BankRatesPage() {
 
   // 获取列的类名
   const getColumnClassName = (columnIndex: number, isHeader = false) => {
-    let baseClass = '';
+    let baseClass = "";
     // 根据列索引添加对应的基础样式类
     if (columnIndex === 0) {
-      baseClass = 'bank-column';
+      baseClass = "bank-column";
     } else if (columnIndex === 1) {
-      baseClass = 'savings-column';
+      baseClass = "savings-column";
     } else if (columnIndex === 2) {
-      baseClass = 'deposit-title';
+      baseClass = "deposit-title";
     } else if (columnIndex === periods.length + 3) {
-      baseClass = 'amount-column';
+      baseClass = "amount-column";
     } else {
-      baseClass = 'rate-column';
+      baseClass = "rate-column";
     }
-    
+
     // 添加 hover 效果的类名
-    const hoverClass = hoveredColumn === columnIndex ? 'column-hover' : '';
-    
-    return `${baseClass} ${isHeader ? 'bank-table-th' : 'bank-table-td'} ${hoverClass}`.trim();
+    const hoverClass = hoveredColumn === columnIndex ? "column-hover" : "";
+
+    return `${baseClass} ${
+      isHeader ? "bank-table-th" : "bank-table-td"
+    } ${hoverClass}`.trim();
   };
 
   if (loading) {
@@ -113,7 +115,9 @@ export default function BankRatesPage() {
             {Object.keys(todayData || {}).map((currency) => (
               <button
                 key={currency}
-                className={`currency-tab ${activeTab === currency ? 'active' : ''}`}
+                className={`currency-tab ${
+                  activeTab === currency ? "active" : ""
+                }`}
                 onClick={() => setActiveTab(currency)}
               >
                 {currency}
@@ -128,23 +132,35 @@ export default function BankRatesPage() {
             <div className="table-container">
               <div className="header-sticky">
                 <table className="bank-table">
+                  <colgroup>
+                    <col style={{ width: "12%" }} />
+                    <col style={{ width: "6%" }} />
+                    <col style={{ width: "16%" }} />
+                    {periods.map((period) => (
+                      <col
+                        key={period}
+                        style={{ width: `${60 / periods.length}%` }}
+                      />
+                    ))}
+                    <col style={{ width: "6%" }} />
+                  </colgroup>
                   <thead>
                     <tr>
-                      <th 
+                      <th
                         className={getColumnClassName(0, true)}
                         onMouseEnter={() => handleColumnHover(0)}
                         onMouseLeave={() => handleColumnHover(null)}
                       >
                         銀行名稱
                       </th>
-                      <th 
+                      <th
                         className={getColumnClassName(1, true)}
                         onMouseEnter={() => handleColumnHover(1)}
                         onMouseLeave={() => handleColumnHover(null)}
                       >
                         活期存款
                       </th>
-                      <th 
+                      <th
                         className={getColumnClassName(2, true)}
                         onMouseEnter={() => handleColumnHover(2)}
                         onMouseLeave={() => handleColumnHover(null)}
@@ -152,7 +168,7 @@ export default function BankRatesPage() {
                         定期存款
                       </th>
                       {periods.map((period, index) => (
-                        <th 
+                        <th
                           key={period}
                           className={getColumnClassName(index + 3, true)}
                           onMouseEnter={() => handleColumnHover(index + 3)}
@@ -161,9 +177,11 @@ export default function BankRatesPage() {
                           {period}
                         </th>
                       ))}
-                      <th 
+                      <th
                         className={getColumnClassName(periods.length + 3, true)}
-                        onMouseEnter={() => handleColumnHover(periods.length + 3)}
+                        onMouseEnter={() =>
+                          handleColumnHover(periods.length + 3)
+                        }
                         onMouseLeave={() => handleColumnHover(null)}
                       >
                         起存金額
@@ -175,6 +193,18 @@ export default function BankRatesPage() {
 
               <div className="table-wrapper">
                 <table className="bank-table">
+                  <colgroup>
+                    <col style={{ width: "12%" }} />
+                    <col style={{ width: "6%" }} />
+                    <col style={{ width: "16%" }} />
+                    {periods.map((_, index) => (
+                      <col
+                        key={index}
+                        style={{ width: `${60 / periods.length}%` }}
+                      />
+                    ))}
+                    <col style={{ width: "6%" }} />
+                  </colgroup>
                   <tbody>
                     {Object.keys(todayData[activeTab]).map((groupName) => (
                       <React.Fragment key={groupName}>
@@ -194,7 +224,10 @@ export default function BankRatesPage() {
                                   onMouseEnter={() => handleColumnHover(0)}
                                   onMouseLeave={() => handleColumnHover(null)}
                                 >
-                                  <BankNameComponent url={bank.url} bankName={bank.bankName} />
+                                  <BankNameComponent
+                                    url={bank.url}
+                                    bankName={bank.bankName}
+                                  />
                                 </td>
                               )}
                               {depositIdx === 0 && (
@@ -207,7 +240,9 @@ export default function BankRatesPage() {
                                   <BankSavingsComponent
                                     today={bank.savings}
                                     savingsUrl={bank.savingsUrl}
-                                    old={oldData[activeTab][groupName][idx].savings}
+                                    old={
+                                      oldData[activeTab][groupName][idx].savings
+                                    }
                                   />
                                 </td>
                               )}
@@ -218,19 +253,62 @@ export default function BankRatesPage() {
                               >
                                 {depositItem.title || "-"}
                               </td>
-                              {periods.map((period, index) => (
-                                <td
-                                  key={period}
-                                  className={getColumnClassName(index + 3)}
-                                  onMouseEnter={() => handleColumnHover(index + 3)}
-                                  onMouseLeave={() => handleColumnHover(null)}
-                                >
-                                  {depositItem.rates[period] || "-"}
-                                </td>
-                              ))}
+                              {periods.map((period, index) => {
+                                const newRate = depositItem.rates[period];
+                                const oldRate =
+                                  oldData[activeTab][groupName][idx].deposit[
+                                    depositIdx
+                                  ].rates[period];
+                                let rateClass = "";
+
+                                if (newRate && oldRate) {
+                                  const newValue = parseFloat(newRate);
+                                  const oldValue = parseFloat(oldRate);
+                                  if (newValue > oldValue) {
+                                    rateClass = "rate-up";
+                                  } else if (newValue < oldValue) {
+                                    rateClass = "rate-down";
+                                  }
+                                }
+
+                                return (
+                                  <td
+                                    key={period}
+                                    className={getColumnClassName(index + 3)}
+                                    onMouseEnter={() =>
+                                      handleColumnHover(index + 3)
+                                    }
+                                    onMouseLeave={() => handleColumnHover(null)}
+                                  >
+                                    {newRate || "-"}
+                                    {rateClass && oldRate && (
+                                      <>
+                                        <del
+                                          style={{
+                                            marginLeft: "8px",
+                                            color:
+                                              rateClass === "rate-up"
+                                                ? "#e57373"
+                                                : "#81c784",
+                                          }}
+                                        >
+                                          {oldRate}
+                                        </del>
+                                        <span className={rateClass}>
+                                          {rateClass === "rate-up" ? "↑" : "↓"}
+                                        </span>
+                                      </>
+                                    )}
+                                  </td>
+                                );
+                              })}
                               <td
-                                className={getColumnClassName(periods.length + 3)}
-                                onMouseEnter={() => handleColumnHover(periods.length + 3)}
+                                className={getColumnClassName(
+                                  periods.length + 3
+                                )}
+                                onMouseEnter={() =>
+                                  handleColumnHover(periods.length + 3)
+                                }
                                 onMouseLeave={() => handleColumnHover(null)}
                               >
                                 {depositItem.min || "-"}

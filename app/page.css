@@ -63,18 +63,20 @@
   right: 0;
   bottom: 8px;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   margin: 0;
 }
 
 .bank-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
+  font-size: 0.875rem;
 }
 
 .bank-table th,
 .bank-table td {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-sm);
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
@@ -101,19 +103,13 @@
   background-color: var(--hover-color);
 }
 
-/* 列宽定义 */
+/* 删除所有列宽定义 */
 .bank-column {
-  width: 160px;
   background-color: var(--background-color);
 }
 
 .savings-column {
-  width: 120px;
   background-color: var(--background-color);
-}
-
-.deposit-column {
-  min-width: 200px;
 }
 
 /* 错误状态样式 */
@@ -134,10 +130,6 @@
 
 .rate-up,
 .rate-down {
-  padding-left: var(--spacing-sm);
-}
-
-.rate-up {
   color: var(--error-color);
 }
 
@@ -182,15 +174,6 @@
   }
 }
 
-/* 数字格式化 */
-.rate-column,
-.amount-column {
-  width: 100px;
-  text-align: right;
-  font-family: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
-  padding-right: var(--spacing-lg);
-}
-
 /* 响应式调整 */
 @media (max-width: 1024px) {
   .table-container {
@@ -203,25 +186,20 @@
   }
 }
 
-/* 修改表头的 deposit-title 样式 */
+/* 删除表头和表体 deposit-title 的宽度定义 */
 .bank-table thead .deposit-title {
-  width: 240px;
-  font-size: 1rem; /* 或者你想要的其他大小 */
-  color: inherit; /* 使用默认文字颜色 */
+  color: inherit;
   padding: var(--spacing-sm) var(--spacing-md);
 }
 
-/* 修改表体的 deposit-title 样式 */
 .bank-table tbody .deposit-title {
-  width: 240px;
-  font-size: 0.875rem; /* 12px */
+  font-size: 0.75rem;
   color: var(--text-secondary);
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-sm);
 }
 
 /* 移除原来的 deposit-title 样式 */
 .deposit-title {
-  width: 240px;
   padding: 0 var(--spacing-sm);
 }
 
@@ -440,14 +418,6 @@
   gap: var(--spacing-md);
 }
 
-/* 修改链接颜色 */
-.bank-name-link {
-  color: #d68438; /* 温暖的橙褐色 */
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  transition: all 0.3s ease;
-}
-
 [data-theme="dark"] .bank-name-link {
   color: #e6a972; /* 暗色模式下更柔和的橙色 */
 }
@@ -510,6 +480,7 @@
 .rate-column,
 .amount-column,
 .savings-link {
+  font-size: 0.75rem;
   font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', 'Roboto Mono', Monaco, 'Noto Sans Mono', Menlo, Consolas, monospace;
   text-align: right;
   padding-right: var(--spacing-lg);
