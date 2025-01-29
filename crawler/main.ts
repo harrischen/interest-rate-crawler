@@ -30,7 +30,10 @@ export async function main() {
     timeout: 0,
     protocolTimeout: 0,
     ignoreHTTPSErrors: true,
-    defaultViewport: null,
+    defaultViewport: {
+      width: 1920,
+      height: 1080
+    },
     ignoreDefaultArgs: ["--enable-automation"],
     args: [
       "--disable-gpu",
@@ -43,6 +46,9 @@ export async function main() {
       "--no-sandbox",
       "--no-zygote",
       "--single-process",
+      "--disable-blink-features=AutomationControlled",
+      `--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36`,
+      "--window-size=1920,1080",
     ],
   };
 
@@ -83,7 +89,7 @@ export async function main() {
     const res = await promises[i](browser);
     console.log(`------------${i}`);
     targetContent.list.push(res);
-    browser.close();
+    await browser.close();
   }
   targetContent.end = new Date().getTime().toString();
   const targetDir = path.join(__dirname, `../public/`);
