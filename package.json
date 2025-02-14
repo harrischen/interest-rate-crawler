@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start -p 4000",
     "lint": "next lint",
-    "build:crawler": "ts-node ./crawler/main.ts"
+    "build:crawler": "ts-node ./crawler/main.ts",
+    "update": "chmod +x ./scripts/auto-update.sh && ./scripts/auto-update.sh"
   },
   "dependencies": {
     "@next/third-parties": "^14.2.13",
